@@ -1,4 +1,4 @@
-# Creep Me Out, Jefferson!
+# Adams Apple
 
 This is just a quick and dirty throw away app intended to try out two (or three) main things:
 

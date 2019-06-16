@@ -2,14 +2,14 @@ import { Component, h } from "preact";
 import * as style from "./style.css";
 
 interface Props {
-    user: string;
+    id: string;
 }
 
 interface State {
     time: number;
     count: number;
 }
-export default class Profile extends Component<Props, State> {
+export default class Photo extends Component<Props, State> {
     public state = {
         time: Date.now(),
         count: 10
@@ -36,18 +36,13 @@ export default class Profile extends Component<Props, State> {
     public increment = () => {
         this.setState({ count: this.state.count + 1 });
     };
-    public render({ user }: Props, { time, count }: State) {
+    public render({ id }: Props, /* { time, count }: State */ ) {
         return (
             <div class={style.profile}>
-                <h1>Profile: {user}</h1>
-                <p>This is the user profile for a user named {user}.</p>
+                <h1>Photo: {id}</h1>
+                <p>This is a picture of the food with id: {id}.</p>
 
-                <div>Current time: {new Date(time).toLocaleString()}</div>
-
-                <p>
-                    <button onClick={this.increment}>Click Me</button> Clicked{" "}
-                    {count} times.
-                </p>
+                <img src={"/assets/images/"+id+".jpg"} />
             </div>
         );
     }
