@@ -3,19 +3,14 @@
   "short_name": "adams-apple",
   "start_url": "/",
   "display": "standalone",
-  "orientation": "portrait",
-  "background_color": "#fff",
-  "theme_color": "#673ab8",
+  "orientation": "any",
+  "background_color": "#754a23",
+  "theme_color": "#754a23 ",
   "icons": [
     {
-      "src": "/assets/icons/android-chrome-192x192.png",
+      "src": "/assets/icons/adams-apple-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
-    },
-    {
-      "src": "/assets/icons/android-chrome-512x512.png",
-      "type": "image/png",
-      "sizes": "512x512"
     }
   ]
 }
