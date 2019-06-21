@@ -27,7 +27,7 @@ export default class App extends Component {
                     <Route path="/" component={Choice} />
                     <Route path="/choice/:step" component={Choice} />
                     <Route path="/choice/:step/:a/:b" component={Choice} />
-                    <Route path="/photos/:id" component={Photo} />
+                    <Route path="/food/:id" component={Photo} />
                 </Router>
             </div>
         );
