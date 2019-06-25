@@ -2,10 +2,10 @@ import { Component, h } from "preact";
 
 export default class Tracker extends Component {
 
-    render() {
+    public render() {
         return (
             <div>
-                <script async src="https://www.googletagmanager.com/gtag/js?id=UA-142228380-1"></script>
+                <script async={true} src="https://www.googletagmanager.com/gtag/js?id=UA-142228380-1" />
                 <script>
                 {"window.dataLayer = window.dataLayer || [];"}
                 {"function gtag(){dataLayer.push(arguments);}"}

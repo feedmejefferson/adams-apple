@@ -1,13 +1,16 @@
 import { Component, h } from "preact";
 import * as style from "./style.css";
 
-interface Props {}
+interface Props {
+    hello: string;
+    world: string;
+}
 export default class Home extends Component<Props> {
-    public render() {
+    public render({hello}: Props) {
         return (
             <div class={style.home}>
                 <h1>Home</h1>
-                <p>This is the Home component.</p>
+                <p>{hello}</p>
             </div>
         );
     }
