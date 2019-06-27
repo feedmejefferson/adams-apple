@@ -1,19 +1,22 @@
 import { Component, h } from "preact";
+import { IndexedTree } from "../crystal-bowl/tree";
 import { Food } from "../food";
 import * as style from "./style.css";
 
 interface State {
     step: number;
     branch: number;
-    id: number;
-    pairedAgainst: number;
+    id: string;
+    pairedAgainst: string;
+    tree: IndexedTree;
 }
 
 interface Props {
     step: number;
     branch: number;
-    id: number;
-    pairedAgainst: number;
+    id: string;
+    pairedAgainst: string;
+    tree: IndexedTree;
 }
 
 
@@ -26,7 +29,12 @@ export class Option extends Component<Props, State> {
     }
     public handleClick = () => {
         const nextStep = (this.state.step*1) + 1;
-        window.location.href=`/choice?step=${nextStep}&branch=${this.state.branch}`;
+        if(this.state.tree.get(this.state.branch)) {
+            // this is a terminal branch
+            window.location.href=`/food/${this.state.id}`;
+        } else {
+            window.location.href=`/choice?step=${nextStep}&branch=${this.state.branch}`;
+        }
         // @ts-ignore
         gtag('event', 'selection', {
             'event_category': 'chosen',

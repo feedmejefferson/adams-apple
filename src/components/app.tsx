@@ -3,6 +3,8 @@ import { Route, Router, RouterOnChangeArgs } from "preact-router";
 
 import Home from "../routes/home";
 import Photo from "../routes/photo";
+import { CrystalBowl } from "./crystal-bowl";
+import { Food } from "./food"
 import Header from "./header";
 import { Selection } from "./selection";
 import Tracker from "./tracker";
@@ -24,9 +26,9 @@ export default class App extends Component {
                 <Tracker />
                 <Header />
                 <Router onChange={this.handleRoute}>
-                    <Route path="/" component={Selection} />
-                    <Route path="/choice" component={Selection} />
-                    <Route path="/food/:id" component={Photo} />
+                    <Route path="/" component={CrystalBowl} />
+                    <Route path="/choice" component={CrystalBowl} />
+                    <Route path="/food/:id" component={Food} />
                 </Router>
             </div>
         );

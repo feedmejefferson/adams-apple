@@ -3,6 +3,8 @@ import { Component, h } from "preact";
 export default class Tracker extends Component {
 
     public render() {
+        // hack to disable tracking
+//        if(true) return ( <div></div>)
         return (
             <div>
                 <script async={true} src="https://www.googletagmanager.com/gtag/js?id=UA-142228380-1" />

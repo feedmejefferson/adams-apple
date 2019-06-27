@@ -2,7 +2,7 @@ import { Component, h } from "preact";
 import * as style from "./style.css";
 
 interface Props {
-    id: number;
+    id: string;
     onClick: JSX.EventHandler<MouseEvent>
 }
 
