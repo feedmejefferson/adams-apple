@@ -16,7 +16,7 @@ interface Props {
     tree: IndexedTree;
 }
 
-export class Selection extends Component<Props, State> {
+export class Dilemma extends Component<Props, State> {
     public render({ step, branch, a, b, tree }: Props) {
         step = !step ? 1 : step; // hack to force strings into numbers
         branch = !branch ? 1 : branch; // hack to force strings into numbers

@@ -1,5 +1,5 @@
 import { Component, h } from "preact";
-import { Selection } from "../selection"
+import { Dilemma } from "../dilemma"
 import { IndexedTree } from "./tree";
 
 
@@ -34,7 +34,7 @@ export class CrystalBowl extends Component<Props, State> {
             const branchB = branchA + 1;
             a = a ? a : this.state.tree.getRandom(branchA);
             b = b ? b : this.state.tree.getRandom(branchB);
-            selection = <Selection step={step} branch={branch} a={a} b={b} tree={this.state.tree} />;
+            selection = <Dilemma step={step} branch={branch} a={a} b={b} tree={this.state.tree} />;
         } else {
             selection = "";
         }

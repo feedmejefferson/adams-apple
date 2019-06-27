@@ -4,9 +4,9 @@ import { Route, Router, RouterOnChangeArgs } from "preact-router";
 import Home from "../routes/home";
 import Photo from "../routes/photo";
 import { CrystalBowl } from "./crystal-bowl";
+import { Dilemma } from "./dilemma";
 import { Food } from "./food"
 import Header from "./header";
-import { Selection } from "./selection";
 import Tracker from "./tracker";
 
 if ((module as any).hot) {
