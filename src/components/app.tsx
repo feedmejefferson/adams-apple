@@ -1,5 +1,7 @@
 import { Component, h } from "preact";
 import { Route, Router, RouterOnChangeArgs } from "preact-router";
+import createStore from "unistore";
+import { connect, Provider } from "unistore/preact";
 
 import Home from "../routes/home";
 import Photo from "../routes/photo";
@@ -14,6 +16,11 @@ if ((module as any).hot) {
     require("preact/debug");
 }
 
+const store = createStore({
+    branch: 1,
+    tree: {}
+  });
+
 export default class App extends Component {
     public currentUrl?: string;
     public handleRoute = (e: RouterOnChangeArgs) => {
@@ -22,15 +29,17 @@ export default class App extends Component {
 
     public render() {
         return (
-            <div id="app">
-                <Tracker />
-                <Header />
-                <Router onChange={this.handleRoute}>
-                    <Route path="/" component={CrystalBowl} />
-                    <Route path="/choice" component={CrystalBowl} />
-                    <Route path="/food/:id" component={Food} />
-                </Router>
-            </div>
+            <Provider store={store}>
+                <div id="app">
+                    <Tracker />
+                    <Header />
+                    <Router onChange={this.handleRoute}>
+                        <Route path="/" component={CrystalBowl} />
+                        <Route path="/choice" component={CrystalBowl} />
+                        <Route path="/food/:id" component={Food} />
+                    </Router>
+                </div>
+            </Provider>
         );
     }
 }

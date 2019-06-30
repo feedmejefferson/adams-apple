@@ -57,7 +57,8 @@
     "preact": "^8.3.1",
     "preact-compat": "^3.18.4",
     "preact-render-to-string": "^4.1.0",
-    "preact-router": "^2.6.1"
+    "preact-router": "^2.6.1",
+    "unistore": "^3.4.1"
   },
   "peerDependencies": {
     "prettier": ">1.0.0",
