@@ -1,5 +1,5 @@
 import { Component, h } from "preact";
-import { IndexedTree } from "../crystal-bowl/tree";
+import { IndexedTree } from "../../state/tree";
 import { Food } from "../food";
 import * as style from "./style.css";
 

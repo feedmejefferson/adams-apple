@@ -1,31 +1,31 @@
-// Generic concepts
-export interface Dilemma<T> {
-    a: T,
-    b: T
+import { IndexedTree } from "./tree";
+
+export interface Dilemma {
+    a: Food,
+    b: Food
 }
-export interface Choice<T> {
-    chosen: T,
-    notChosen: T
+export interface Choice {
+    chosen: Food,
+    notChosen: Food
 }
-export interface Mood<T> {
-    dilemma: Dilemma<T>,
-    choices: Array<Choice<T>> 
+export interface AppState {
+    tree: IndexedTree,
+    branch: number,
+    dilemma: Dilemma,
+    choices: Choice[]
 }
-// food specific implementations
 export interface Food {
     id: string
 }
 export function food(id: string): Food {
     return {id}
 }
-export function dilemma(aId: string, bId: string): Dilemma<Food> {
+export function dilemma(aId: string, bId: string): Dilemma {
     return {a:food(aId), b:food(bId)}
 }
-export class Appetite implements Mood<Food> {
-    public dilemma: Dilemma<Food>;    
-    public choices: Array<Choice<Food>>=[];
-    constructor() {
-        this.dilemma={a:food('1'),b:food('2')}
-    }
-
+export function newAppState(): AppState {
+    // bootstrap initial 8 images for now
+    const tree = new IndexedTree(JSON.parse('{"8":"0000004","9":"0000261","10":"0000997","11":"0000879","12":"0000091","13":"0000473","14":"0000549","15":"0000117"}'));
+    const firstDilemma = dilemma(tree.getRandom(2), tree.getRandom(3));
+    return {tree, branch: 1, dilemma: firstDilemma, choices:[]}
 } 
