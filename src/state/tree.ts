@@ -1,3 +1,4 @@
+
 export class IndexedTree {
     private nodes: any;
     // private minIndex: number;
@@ -10,6 +11,7 @@ export class IndexedTree {
     public get(nodeIndex: number): string {
         return this.nodes[`${nodeIndex}`];
     }
+    
     public getFirst(nodeIndex: number): string {
         if(nodeIndex>this.maxIndex) {
             return "none"; // TODO: figure out how to best handle missing terminal nodes
@@ -28,13 +30,26 @@ export class IndexedTree {
     public expandBranch(branch: number, tree: any): IndexedTree {
         // TODO: should we add in logic to check for integrity?
         // this is a really a question in general for all new trees
-        console.log(tree)
         const nodes = {...this.nodes, ...tree};
         delete nodes[`${branch}`];
-        console.log(nodes)
 
         return new IndexedTree(nodes);
     }
 
+
+    public ancestorNodeId(nodeIndex: number): number {
+        // tslint:disable-next-line: no-bitwise
+        for(let i = nodeIndex;i>1;i>>=1) {
+            if(this.get(i)) { return i; }
+        } 
+        return 0;
+    }
+    public firstChildNodeId(nodeIndex: number): number {
+        // tslint:disable-next-line: no-bitwise
+        for(let i = nodeIndex;i<=this.maxIndex;i*=2) {
+            if(this.get(i)) { return i; }
+        } 
+        return 0;
+    }
 
 }

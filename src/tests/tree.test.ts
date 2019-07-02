@@ -1,4 +1,5 @@
 import { IndexedTree } from "../state/tree";
+import { childPartials } from "../state/tree-loader";
 
 describe("Tree tests", () => {
     test("constructor works", () => {
@@ -15,4 +16,17 @@ describe("Tree tests", () => {
         expect(newTree.getFirst(1)).toEqual("016");
         expect(newTree.getFirst(5)).toEqual("010");
     });
+    test("load partials", () => {
+        expect(childPartials(2)).toEqual([8,9,10,11]);
+        expect(childPartials(6)).toEqual([12,13]);
+        expect(childPartials(33)).toEqual([66,67]);
+
+    });
+    test("expand branch", () => {
+        const tree = new IndexedTree(JSON.parse('{"8":"008","9":"009","10":"010","11":"011","12":"012","13":"013","14":"014","15":"015"}'))
+        expect(tree.ancestorNodeId(5)).toBeFalsy();
+        expect(tree.ancestorNodeId(16)).toBe(8)
+        expect(tree.firstChildNodeId(3)).toBe(12);
+    });
+
 });

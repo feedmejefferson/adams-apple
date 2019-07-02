@@ -1,4 +1,5 @@
 import createStore, {Store} from "unistore";
+import { loadBranch } from "./tree-loader";
 import { AppState, dilemma as newDilemma, newAppState } from "./types";
 
 export const globalState = createStore<AppState>(newAppState());
@@ -16,12 +17,18 @@ function chooseSide(state: AppState, side: number) {
         // this is a terminal node, stop now and reroute to the food url
         // TODO: do something less hacky here...
         window.location.href=`/food/${choiceMade.chosen.id}`;
-    }
+        return;
+    } 
+        
+    const dilemma = newDilemma(state.tree.getRandom(branch*2),state.tree.getRandom(branch*2+1));
+    //    console.log(history.state);
+    window.history.pushState("object or string", "Another Food Dilemma", `/choice/?branch=${branch}&a=${dilemma.a.id}&b=${dilemma.b.id}`);
     return {
         branch,
-        dilemma: newDilemma(state.tree.getRandom(branch*2),state.tree.getRandom(branch*2+1)),
+        dilemma,
         choices: [...state.choices, choiceMade ]
     };
+    
 
 }
 
@@ -36,25 +43,7 @@ export const actions = (store: Store<AppState>) => ({
     },
 
     expandBranch({ branch }: AppState) {
-        console.log(branch);
-        // using a bit of brute force here to preload branch expansions
-        // if(Math.floor(Math.log2(branch))%3!==2) {
-        if(Math.floor(Math.log2(branch))%3!==1) {
-                return;
-        }
-        // [0,1].map(x=>x+branch*2)
-        [0,1,2,3].map(x=>x+branch*4)
-        .forEach(b => {
-            fetch(`/assets/meta/indexed-tree.${b}.json`)
-            // for now we'll just filter out non existent responses
-            .then(res => {if(!res.ok){throw Error()} return res; })
-            .then(res => res.json())
-            .then(json => {
-                const { tree } = store.getState();
-                store.setState({tree: tree.expandBranch(b, json)});
-            })
-        });
-            
+        loadBranch(store, branch);
     },
 
 });

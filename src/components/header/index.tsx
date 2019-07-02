@@ -6,7 +6,7 @@ export default class Header extends Component {
     public render() {
         return (
             <header class={style.header}>
-                <h1>Adams 🍎</h1>
+                <h1><a href="/">Adams 🍎</a></h1>
             </header>
         );
     }

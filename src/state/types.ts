@@ -1,4 +1,5 @@
 import { IndexedTree } from "./tree";
+import { loadBootstrap } from "./tree-loader";
 
 export interface Dilemma {
     a: Food,
@@ -25,7 +26,7 @@ export function dilemma(aId: string, bId: string): Dilemma {
 }
 export function newAppState(): AppState {
     // bootstrap initial 8 images for now
-    const tree = new IndexedTree(JSON.parse('{"8":"0000004","9":"0000261","10":"0000997","11":"0000879","12":"0000091","13":"0000473","14":"0000549","15":"0000117"}'));
+    const tree = loadBootstrap();
     const firstDilemma = dilemma(tree.getRandom(2), tree.getRandom(3));
     return {tree, branch: 1, dilemma: firstDilemma, choices:[]}
 } 

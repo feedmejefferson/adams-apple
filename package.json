@@ -12,6 +12,7 @@
     "dev": "preact watch",
     "lint": "tslint --project .",
     "test": "jest ./tests",
+    "test:watch": "jest ./tests --watch",
     "precommit": "lint-staged"
   },
   "lint-staged": {

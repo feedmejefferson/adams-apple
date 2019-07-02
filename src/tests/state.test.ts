@@ -6,7 +6,9 @@ describe("Reducer tests", () => {
         const app = newAppState();
         app.dilemma = dilemma('a', 'b');
         const choice={chosen: food('a'), notChosen: food('b')};
-        expect(actions(globalState).chooseA(app).choices[0]).toEqual(choice);
+        const newState = actions(globalState).chooseA(app);
+        expect(newState).toBeDefined(); 
+        expect(newState && newState.choices[0]).toEqual(choice);
     });
 
 });

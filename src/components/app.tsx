@@ -11,7 +11,7 @@ import { Food } from "./food"
 import Header from "./header";
 import Tracker from "./tracker";
 
-globalState.subscribe((state: AppState) => console.log(state));
+ globalState.subscribe((state: AppState) => console.log(state));
 
 if ((module as any).hot) {
     // tslint:disable-next-line:no-var-requires
