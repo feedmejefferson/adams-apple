@@ -68,7 +68,6 @@ export function loadBranch(store: Store<AppState>, branch: number) {
     // now we can eager load to expand our current branch
     // we should eager load if we are less than the eagerness level
     // number of steps away from the first child node
-    // tslint:disable-next-line: no-bitwise
     if(((tree.firstChildNodeId(branch)/branch)>>(eagerness+1))) {
         // we are at least eagerness clicks away from a terminal node
         // so we don't need to expand the branch

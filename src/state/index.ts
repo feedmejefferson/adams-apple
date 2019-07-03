@@ -13,19 +13,22 @@ function chooseSide(state: AppState, side: number) {
         chosen: side ? state.dilemma.b :state.dilemma.a, 
         notChosen: side ? state.dilemma.a : state.dilemma.b 
     };
+    const choices = [...state.choices, choiceMade];
 
+    if(state.analytics){
     // @ts-ignore
-    gtag('event', 'selection', {
-        'event_category': 'chosen',
-        'event_label': `/food/${choiceMade.chosen.id}`,
-        'value': 1
+    gtag('event', 'prefer', {
+        'event_category': `/food/${choiceMade.chosen.id}`,
+        'event_label': `branch=${branch}`,
+        'value': choices.length
         });
     // @ts-ignore
-    gtag('event', 'selection', {
-        'event_category': 'notChosen',
-        'event_label': `/food/${choiceMade.notChosen.id}`,
-        'value': 1
+    gtag('event', 'decline', {
+        'event_category': `/food/${choiceMade.notChosen.id}`,
+        'event_label': `branch={branch}`,
+        'value': choices.length
         });
+    }
     
     if(state.tree.get(branch)) {
         // this is a terminal node, stop now and reroute to the food url

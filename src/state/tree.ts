@@ -45,7 +45,6 @@ export class IndexedTree {
         return 0;
     }
     public firstChildNodeId(nodeIndex: number): number {
-        // tslint:disable-next-line: no-bitwise
         for(let i = nodeIndex;i<=this.maxIndex;i*=2) {
             if(this.get(i)) { return i; }
         } 
