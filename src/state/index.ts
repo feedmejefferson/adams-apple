@@ -13,6 +13,20 @@ function chooseSide(state: AppState, side: number) {
         chosen: side ? state.dilemma.b :state.dilemma.a, 
         notChosen: side ? state.dilemma.a : state.dilemma.b 
     };
+
+    // @ts-ignore
+    gtag('event', 'selection', {
+        'event_category': 'chosen',
+        'event_label': `/food/${choiceMade.chosen.id}`,
+        'value': 1
+        });
+    // @ts-ignore
+    gtag('event', 'selection', {
+        'event_category': 'notChosen',
+        'event_label': `/food/${choiceMade.notChosen.id}`,
+        'value': 1
+        });
+    
     if(state.tree.get(branch)) {
         // this is a terminal node, stop now and reroute to the food url
         // TODO: do something less hacky here...
