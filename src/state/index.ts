@@ -1,6 +1,6 @@
 import createStore, {Store} from "unistore";
 import { loadBranch } from "./tree-loader";
-import { AppState, newAppState, randomDilemma } from "./types";
+import { AppState, food, newAppState, randomDilemma } from "./types";
 
 export const globalState = createStore<AppState>(newAppState());
 
@@ -30,22 +30,22 @@ function chooseSide(state: AppState, side: number) {
         });
     }
     
-    if(state.tree.get(branch)) {
-        // this is a terminal node, stop now and reroute to the food url
-        // TODO: do something less hacky here...
-        window.location.href=`/food/${choiceMade.chosen.id}`;
-        return;
+    const recId=state.tree.get(branch); // only defined for terminal nodes
+    if(recId) {
+        window.history.pushState("object or string", "Recommended Food", `/food/${recId}`);
+        return {
+            branch,
+            recommendation: food(recId),
+            choices: [...state.choices, choiceMade ]
+        };
     } 
-    const dilemma = randomDilemma(state.tree, branch);
-    //    console.log(history.state);
+    const dilemma = randomDilemma(state.tree, branch)
     window.history.pushState("object or string", "Another Food Dilemma", `/choice/?branch=${branch}&a=${dilemma.a.id}&b=${dilemma.b.id}`);
     return {
         branch,
         dilemma,
         choices: [...state.choices, choiceMade ]
-    };
-    
-
+    };    
 }
 
 export const actions = (store: Store<AppState>) => ({
@@ -60,6 +60,19 @@ export const actions = (store: Store<AppState>) => ({
 
     expandBranch({ branch }: AppState) {
         loadBranch(store, branch);
+    },
+
+    startOver({ tree }: AppState) {
+        // TODO: figure out why dilemmas stop rerendering if I don't us
+        // this "nuclear" option of doing a full reload. It isn't the worst
+        // option, but it would be nice to manage the transition a bit better.
+        window.location.href="/";
+        return {
+            branch: 1,
+            dilemma: randomDilemma(tree, 1),
+            recommendation: undefined,
+            choices: []
+        };
     },
 
 });

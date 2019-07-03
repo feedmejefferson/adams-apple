@@ -4,7 +4,7 @@ import { globalState } from "../../state";
 import { IndexedTree } from "../../state/tree";
 import { loadBranch } from "../../state/tree-loader";
 import { dilemma as newDilemma } from "../../state/types"
-import { Dilemma } from "../dilemma"
+import { Container } from "../container"
 
 
 interface Props {
@@ -23,6 +23,6 @@ export class CrystalBowl extends Component<Props, {}> {
             dilemma: newDilemma(a ? a : state.dilemma.a.id ,b ? b : state.dilemma.b.id)
         });
         loadBranch(globalState, branch);
-        return <Dilemma/>
+        return <Container />
     }
 }

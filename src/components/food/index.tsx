@@ -3,7 +3,7 @@ import * as style from "./style.css";
 
 interface Props {
     id: string;
-    onClick: JSX.EventHandler<MouseEvent>
+    onClick?: JSX.EventHandler<MouseEvent>
 }
 
 

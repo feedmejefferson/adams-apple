@@ -1,14 +1,14 @@
 import { Provider} from "unistore/preact";
 import { globalState } from "../state";
 import { AppState } from "../state/types"
-import { Dilemma } from "./dilemma"
+import { Container } from "./container"
 
 import { Component, h } from "preact";
 import { Route, Router, RouterOnChangeArgs } from "preact-router";
 
 import { CrystalBowl } from "./crystal-bowl";
 import { Food } from "./food"
-import Header from "./header";
+import { Header } from "./header";
 import Tracker from "./tracker";
 
 // globalState.subscribe((state: AppState) => console.log(state));
@@ -32,7 +32,7 @@ export default class App extends Component {
                     <Tracker />
                     <Header />
                     <Router onChange={this.handleRoute}>
-                        <Route path="/" component={Dilemma} />
+                        <Route path="/" component={Container} />
                         <Route path="/choice" component={CrystalBowl} />
                         <Route path="/food/:id" component={Food} />
                     </Router>
