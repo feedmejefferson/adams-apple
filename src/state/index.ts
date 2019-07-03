@@ -1,6 +1,6 @@
 import createStore, {Store} from "unistore";
 import { loadBranch } from "./tree-loader";
-import { AppState, dilemma as newDilemma, newAppState } from "./types";
+import { AppState, newAppState, randomDilemma } from "./types";
 
 export const globalState = createStore<AppState>(newAppState());
 
@@ -36,8 +36,7 @@ function chooseSide(state: AppState, side: number) {
         window.location.href=`/food/${choiceMade.chosen.id}`;
         return;
     } 
-        
-    const dilemma = newDilemma(state.tree.getRandom(branch*2),state.tree.getRandom(branch*2+1));
+    const dilemma = randomDilemma(state.tree, branch);
     //    console.log(history.state);
     window.history.pushState("object or string", "Another Food Dilemma", `/choice/?branch=${branch}&a=${dilemma.a.id}&b=${dilemma.b.id}`);
     return {

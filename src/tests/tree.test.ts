@@ -7,6 +7,7 @@ describe("Tree tests", () => {
         expect(tree.getFirst(1)).toEqual("008");
         expect(tree.getFirst(4)).toEqual("008");
         expect(tree.getFirst(5)).toEqual("010");
+        expect(tree.getRandom(1,0)).toEqual(tree.getFirst(1));
     });
     test("expand branch", () => {
         const tree = new IndexedTree(JSON.parse('{"8":"008","9":"009","10":"010","11":"011","12":"012","13":"013","14":"014","15":"015"}'))

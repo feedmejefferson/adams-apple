@@ -28,10 +28,11 @@ export class IndexedTree {
      * @returns {string} - the value of this branches first terminal node.
      */
     public getFirst(nodeIndex: number): string {
-        if(nodeIndex>this.maxIndex) {
-            return "none"; // TODO: figure out how to best handle missing terminal nodes
+        for(let i = nodeIndex;i<=this.maxIndex;i*=2) {
+            const v = this.get(i);
+            if(v) { return v; }
         } 
-            return this.get(nodeIndex) ? this.get(nodeIndex) : this.getFirst(nodeIndex*2);
+        return "none"; // TODO: figure out how to best handle missing terminal nodes
         
     }
 
@@ -42,18 +43,35 @@ export class IndexedTree {
      * @returns {string} - the value of this branches central most terminal node.
      */
     public getBisect(nodeIndex: number): string {
-        if(nodeIndex>this.maxIndex) {
-            return "none"; // TODO: figure out how to best handle missing terminal nodes
-        } 
-            return this.get(nodeIndex) ? this.get(nodeIndex) : this.getFirst(nodeIndex*2+1);
-        
+        const v = this.get(nodeIndex);
+        return v ? v : this.getFirst(nodeIndex*2+1);
     }
-    public getRandom(nodeIndex: number): string {
-        // TODO: implement this for real -- right now just bisecting
-        if(nodeIndex>this.maxIndex) {
-            return "none"; // TODO: figure out how to best handle missing terminal nodes
-        } 
-            return this.get(nodeIndex) ? this.get(nodeIndex) : this.getFirst(nodeIndex*2+1);
+
+    /**
+     * Traverse the branch using a random seed to find a terminal node. 
+     * 
+     * @param {number} nodeIndex - the node/branch to bisect.
+     * @param {number} seed - a random number between 0 and 1.
+     * @returns {string} - the value of this branches central most terminal node.
+     */
+    public getRandom(nodeIndex: number, seed: number): string {
+        const m = -1>>>1; // max positive signed integer -- 0 followed by 31 ones
+        const s = seed * Number.MAX_SAFE_INTEGER & m; // must be positive -- 0 followed by random
+        let b = nodeIndex;
+        let i = b;
+        // max shift of 31 starts us off with 0 value, each decrement of 1 
+        // doubles the previous value and randomly adds 0 or 1 for a consistent
+        // traversal of the tree. This is important because we want pairings
+        // that represent the same relative traversals from opposing branches.
+        // It's possible that one branch will have to traverse deeper than the
+        // other branch, so it's important that both sides consistently traverse
+        // each of the branches when using the same seed.
+        for(let shift = 30; shift>0 && i<=this.maxIndex; shift--) {
+            if(this.get(i)) { return this.get(i); }
+            b *= 2;
+            i = b + (s>>shift);
+        }
+        return "none";
         
     }
     public expandBranch(branch: number, tree: any): IndexedTree {

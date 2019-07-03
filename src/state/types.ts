@@ -25,9 +25,15 @@ export function food(id: string): Food {
 export function dilemma(aId: string, bId: string): Dilemma {
     return {a:food(aId), b:food(bId)}
 }
+export function randomDilemma(tree: IndexedTree, branch: number): Dilemma {
+    const seed = Math.random();
+    const aBranch = branch * 2;
+    const bBranch = aBranch + 1;
+    return dilemma(tree.getRandom(aBranch, seed), tree.getRandom(bBranch, seed))
+}
 export function newAppState(): AppState {
     // bootstrap initial 8 images for now
     const tree = loadBootstrap();
-    const firstDilemma = dilemma(tree.getRandom(2), tree.getRandom(3));
+    const firstDilemma = randomDilemma(tree, 1);
     return {tree, branch: 1, dilemma: firstDilemma, choices:[], analytics: true }
 } 
