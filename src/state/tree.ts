@@ -8,15 +8,44 @@ export class IndexedTree {
         this.maxIndex=Object.keys(tree).map(x => parseInt(x)).reduce((x,y) => x>y ? x : y);
 
     }
+
+    /**
+     * Returns the value of the node at this index if it is a terminal node
+     * or undefined if it is a branch node or not a node in the tree.
+     * 
+     * @param {number} nodeIndex - the id of the node to get the value of.
+     * @returns {string} - the value of the node if it is a terminal/leaf node.
+     */
     public get(nodeIndex: number): string {
         return this.nodes[`${nodeIndex}`];
     }
     
+    /**
+     * Traverses the branch depth first to find the first (left most) 
+     * terminal node.
+     * 
+     * @param {number} nodeIndex - the node/branch to traverse.
+     * @returns {string} - the value of this branches first terminal node.
+     */
     public getFirst(nodeIndex: number): string {
         if(nodeIndex>this.maxIndex) {
             return "none"; // TODO: figure out how to best handle missing terminal nodes
         } 
             return this.get(nodeIndex) ? this.get(nodeIndex) : this.getFirst(nodeIndex*2);
+        
+    }
+
+    /**
+     * Bisect the branch to find a terminal node.
+     * 
+     * @param {number} nodeIndex - the node/branch to bisect.
+     * @returns {string} - the value of this branches central most terminal node.
+     */
+    public getBisect(nodeIndex: number): string {
+        if(nodeIndex>this.maxIndex) {
+            return "none"; // TODO: figure out how to best handle missing terminal nodes
+        } 
+            return this.get(nodeIndex) ? this.get(nodeIndex) : this.getFirst(nodeIndex*2+1);
         
     }
     public getRandom(nodeIndex: number): string {
