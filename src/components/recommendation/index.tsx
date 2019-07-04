@@ -4,13 +4,13 @@ import { actions, globalState } from "../../state"
 import { food } from "../../state/types"
 import * as style from "./style.css";
 
-export const Recommendation = connect('recommendation', actions)(({recommendation, accept, reject, startOver}: any) => 
+export const Recommendation = connect('recommendations', actions)(({recommendations, accept, reject, startOver}: any) => 
 <div class={style.recommendation}
-    style={`background-image: url(/assets/images/${recommendation.id}.jpg)`} 
+    style={`background-image: url(/assets/images/${recommendations[recommendations.length-1].id}.jpg)`} 
 >
     <div class={style.feedback}>
         <button class={style.accept} onClick={() => {accept();startOver();}}>👍</button>
-        <button class={style.reject} onClick={() => {accept();startOver();}}>👎</button>
+        <button class={style.reject} onClick={reject}>👎</button>
     </div>
 </div>
 )
@@ -20,6 +20,6 @@ interface Props {
 }
 
 export const RecRoute = ({id}: Props) => {
-    globalState.setState({recommendation: food(id)});
+    globalState.setState({recommendations: [food(id)]});
     return <Recommendation/>
 }

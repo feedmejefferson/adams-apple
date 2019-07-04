@@ -4,7 +4,7 @@ import { actions } from "../../state"
 import { Dilemma } from "../dilemma";
 import { Recommendation } from "../recommendation";
 
-export const Container = connect('recommendation', actions)(({recommendation}: any) => 
+export const Container = connect('recommendations', actions)(({recommendations}: any) => 
 (
-    recommendation ? <Recommendation /> : <Dilemma />
+    recommendations.length ? <Recommendation /> : <Dilemma />
 ))

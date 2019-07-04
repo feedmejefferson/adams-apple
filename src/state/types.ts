@@ -13,7 +13,7 @@ export interface AppState {
     tree: IndexedTree,
     branch: number,
     dilemma: Dilemma,
-    recommendation?: Food, 
+    recommendations: Food[], 
     choices: Choice[],
     analytics?: any
 }
@@ -36,6 +36,5 @@ export function newAppState(): AppState {
     // bootstrap initial 8 images for now
     const tree = loadBootstrap();
     const firstDilemma = randomDilemma(tree, 1);
-    const recommendation = undefined;
-    return {tree, branch: 1, dilemma: firstDilemma, choices:[], analytics: true }
+    return {tree, branch: 1, dilemma: firstDilemma, recommendations: [], choices:[], analytics: true }
 } 

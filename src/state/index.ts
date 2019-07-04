@@ -30,12 +30,19 @@ function chooseSide(state: AppState, side: number) {
         });
     }
     
-    const recId=state.tree.get(branch); // only defined for terminal nodes
-    if(recId) {
-        window.history.pushState("object or string", "Recommended Food", `/food/${recId}`);
+    if(state.tree.get(branch)) {
+        // we're on a terminal branch -- transition over to the recommendation
+        // phase by proposing anything that was chosen, but not not chosen
+        const chosen = choices.map(c => c.chosen.id);
+        const notChosen = choices.map(c => c.notChosen.id);
+        const contenders = chosen.filter(c => !notChosen.includes(c));
+        const finalists = Array.from(new Set<string>(contenders));
+        const recommendations = finalists.map(f => food(f));
+
+        window.history.pushState("object or string", "Recommended Food", `/food/${recommendations[recommendations.length-1].id}`);
         return {
             branch,
-            recommendation: food(recId),
+            recommendations,
             choices: [...state.choices, choiceMade ]
         };
     } 
@@ -58,20 +65,30 @@ export const actions = (store: Store<AppState>) => ({
         return chooseSide(state, 1);
     },
 
-    accept({analytics, recommendation}: AppState) {
+    accept({analytics, recommendations}: AppState) {
         if(!analytics) { return; }
         // @ts-ignore
         gtag('event', 'accept', {
-            'event_category': `/food/${recommendation && recommendation.id}`
+            'event_category': `/food/${recommendations[recommendations.length-1].id}`
         });
     },
     
-    reject({analytics, recommendation}: AppState) {
-        if(!analytics) { return; }
-        // @ts-ignore
-        gtag('event', 'reject', {
-            'event_category': `/food/${recommendation && recommendation.id}`
-        });
+    reject({analytics, recommendations, choices}: AppState) {
+        if(analytics) { 
+            // @ts-ignore
+            gtag('event', 'reject', {
+                'event_category': `/food/${recommendations[recommendations.length-1].id}`
+            });
+        }
+        if(recommendations.length===1) {
+            // start over
+            window.location.href="/";
+        }
+        const newRecs= [...recommendations];
+        newRecs.pop();
+        return({recommendations: newRecs});
+
+
     },
 
 
