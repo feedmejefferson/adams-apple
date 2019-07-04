@@ -9,6 +9,7 @@ import { Route, Router, RouterOnChangeArgs } from "preact-router";
 import { CrystalBowl } from "./crystal-bowl";
 import { Food } from "./food"
 import { Header } from "./header";
+import { RecRoute } from "./recommendation"
 import Tracker from "./tracker";
 
 // globalState.subscribe((state: AppState) => console.log(state));
@@ -34,7 +35,7 @@ export default class App extends Component {
                     <Router onChange={this.handleRoute}>
                         <Route path="/" component={Container} />
                         <Route path="/choice" component={CrystalBowl} />
-                        <Route path="/food/:id" component={Food} />
+                        <Route path="/food/:id" component={RecRoute} />
                     </Router>
                 </div>
             </Provider>

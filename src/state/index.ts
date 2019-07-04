@@ -58,6 +58,23 @@ export const actions = (store: Store<AppState>) => ({
         return chooseSide(state, 1);
     },
 
+    accept({analytics, recommendation}: AppState) {
+        if(!analytics) { return; }
+        // @ts-ignore
+        gtag('event', 'accept', {
+            'event_category': `/food/${recommendation && recommendation.id}`
+        });
+    },
+    
+    reject({analytics, recommendation}: AppState) {
+        if(!analytics) { return; }
+        // @ts-ignore
+        gtag('event', 'reject', {
+            'event_category': `/food/${recommendation && recommendation.id}`
+        });
+    },
+
+
     expandBranch({ branch }: AppState) {
         loadBranch(store, branch);
     },
