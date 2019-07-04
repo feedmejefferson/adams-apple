@@ -9,6 +9,7 @@ import { Route, Router, RouterOnChangeArgs } from "preact-router";
 import { CrystalBowl } from "./crystal-bowl";
 import { Food } from "./food"
 import { Header } from "./header";
+import { ProcurementRoute } from "./procurement"
 import { RecRoute } from "./recommendation"
 import Tracker from "./tracker";
 
@@ -36,6 +37,7 @@ export default class App extends Component {
                         <Route path="/" component={Container} />
                         <Route path="/choice" component={CrystalBowl} />
                         <Route path="/food/:id" component={RecRoute} />
+                        <Route path="/feedme/:id" component={ProcurementRoute} />
                     </Router>
                 </div>
             </Provider>
