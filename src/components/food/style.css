@@ -1,7 +1,34 @@
-.stuff {
+.food {
     width: 100%;
-	height: 100%;
-	background-position: center center;
-	background-repeat: no-repeat;
-	background-size: cover;
+    height: 100%;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
+.food button {
+    width: 100%;
+    background: none;
+    border: 0px;
+    font-size: 0;
+}
+/*
+See notes in attributions styles. Need to choose consistent styling
+approach -- either flex box or absolute/relative positioning. Going
+with absolute/relative option for now. 
+*/
+.food {
+    position: relative;
+}
+.food button {
+    height: 100%;
+}
+
+/*
+.food {
+	display: flex;
+	flex-direction: column;
+}
+.food button {
+	flex-grow: 1;
+}
+*/

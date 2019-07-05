@@ -1,0 +1,33 @@
+.attribution {
+    font-size: 80%;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    color: #ddd;
+    padding: 0.5em;
+}
+.attribution a {
+    color: rgb(116, 168, 168);
+}
+
+/*
+We don't want the attributions to count as part of the clickable
+food area, because they have their own links that are clickable,
+so we have two options -- absolute positioning which only works if
+the attributions come first in the html, or flexbox which only works
+if the attirbutions come second. 
+For now I'm going with absolute postioning because we want the 
+clickable button area to be optional and we'd like to be able to 
+reuse the same component for non dilemma situations (and have the
+attributions always baked in).
+*/
+.attribution {
+    position: absolute;
+    bottom: 0px;
+    z-index: 50;
+}
+
+/*
+.attribution {
+	width: 100%;
+}
+*/

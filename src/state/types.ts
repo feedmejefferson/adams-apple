@@ -1,3 +1,5 @@
+import { Tracing } from "trace_events";
+import { basket } from "./core-basket";
 import { IndexedTree } from "./tree";
 import { loadBootstrap } from "./tree-loader";
 
@@ -17,12 +19,13 @@ export interface AppState {
     choices: Choice[],
     analytics?: any
 }
-export interface Food {
-    id: string
-}
-export function food(id: string): Food {
-    return {id}
-}
+// export interface Food {
+//     id: string
+// }
+// export function food(id: string): Food {
+//     return {id}
+// }
+
 export function dilemma(aId: string, bId: string): Dilemma {
     return {a:food(aId), b:food(bId)}
 }
@@ -38,3 +41,36 @@ export function newAppState(): AppState {
     const firstDilemma = randomDilemma(tree, 1);
     return {tree, branch: 1, dilemma: firstDilemma, recommendations: [], choices:[], analytics: true }
 } 
+
+export interface Food  {
+    id: string;
+    title: string;
+    originTitle: string;
+    originUrl: string;
+    author?: string;
+    authorProfileUrl?: string;
+    license: string;
+    licenseUrl: string;
+    containsTags: string[];
+    isTags?: string[];
+    descriptiveTags?: string[];
+}
+export const EMPTY = {
+    title: "",
+    originTitle: "",
+    originUrl: "",
+    license: "",
+    licenseUrl: "",
+    author: "",
+    authorProfileUrl: "",
+    containsTags: [],
+    isTags: [],
+    descriptiveTags: []
+}
+
+
+
+export const food = (id: string):Food => {
+    const f = basket[id];
+    return f ? f : { id, ...EMPTY};
+}
