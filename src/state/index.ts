@@ -1,7 +1,7 @@
 import createStore, {Store} from "unistore";
 import { food, newAppState, randomDilemma } from "./constants";
 import { loadBranch } from "./tree-loader";
-import { AppState } from "./types";
+import { AppState, Phase } from "./types";
 
 export const globalState = createStore<AppState>(newAppState());
 
@@ -43,6 +43,7 @@ function chooseSide(state: AppState, side: number) {
         window.history.pushState("object or string", "Recommended Food", `/food/${recommendations[recommendations.length-1].id}`);
         return {
             branch,
+            phase: Phase.RECOMMENDATION,
             recommendations,
             choices: [...state.choices, choiceMade ]
         };
@@ -67,11 +68,14 @@ export const actions = (store: Store<AppState>) => ({
     },
 
     accept({analytics, recommendations}: AppState) {
-        if(!analytics) { return; }
-        // @ts-ignore
-        gtag('event', 'accept', {
-            'event_category': `/food/${recommendations[recommendations.length-1].id}`
-        });
+        if(analytics) { 
+            // @ts-ignore
+            gtag('event', 'accept', {
+                'event_category': `/food/${recommendations[recommendations.length-1].id}`
+            });
+        }
+        window.history.pushState("object or string", "Another Food Dilemma", `/feedme/${recommendations[recommendations.length-1].id}`);
+        return({phase: Phase.PROCUREMENT})
     },
     
     reject({analytics, recommendations, choices}: AppState) {
@@ -92,6 +96,16 @@ export const actions = (store: Store<AppState>) => ({
 
     },
 
+    cookIt({recommendations}: AppState) {
+        const f = recommendations[recommendations.length-1].title;
+        window.location.href=`https://www.google.com/search?q=${f}+recipes`;
+
+    },
+    deliverIt({recommendations}: AppState) {
+        const f = recommendations[recommendations.length-1].title;
+        window.location.href=`https://www.google.com/search?q=${f}+delivery+near+me`;
+
+    },
 
     expandBranch({ branch }: AppState) {
         loadBranch(store, branch);

@@ -1,5 +1,5 @@
 import { IndexedTree } from './tree';
-import { AppState, Dilemma, Food  } from './types';
+import { AppState, Dilemma, Food, Phase  } from './types';
 
 
 
@@ -35,7 +35,7 @@ export function newAppState(): AppState {
     // bootstrap initial 8 images for now
     const tree = bootstrapTree;
     const firstDilemma = randomDilemma(tree, 1);
-    return {tree, branch: 1, dilemma: firstDilemma, recommendations: [], choices:[], analytics: true }
+    return {tree, branch: 1, phase: Phase.DILEMMA, dilemma: firstDilemma, recommendations: [], choices:[], analytics: true }
 } 
 
 export const EMPTY_FOOD = {

@@ -9,7 +9,7 @@ export const Recommendation = connect('recommendations', actions)(({recommendati
     style={`background-image: url(/assets/images/${recommendations[recommendations.length-1].id}.jpg)`} 
 >
     <div class={style.feedback}>
-        <button class={style.accept} onClick={() => {accept();startOver();}}>👍</button>
+        <button class={style.accept} onClick={accept}>👍</button>
         <button class={style.reject} onClick={reject}>👎</button>
     </div>
 </div>

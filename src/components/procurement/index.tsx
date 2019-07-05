@@ -4,13 +4,13 @@ import { actions, globalState } from "../../state"
 import { food } from "../../state/constants"
 import * as style from "./style.css";
 
-export const Procurement = connect('recommendations', actions)(({recommendations, accept, reject, startOver}: any) => 
+export const Procurement = connect('recommendations', actions)(({recommendations, cookIt, deliverIt}: any) => 
 <div class={style.procurement}
     style={`background-image: url(/assets/images/${recommendations[recommendations.length-1].id}.jpg)`} 
 >
     <div class={style.methods}>
-        <button class={style.cook}>🍳</button>
-        <button class={style.deliver}>🚚</button>
+        <button class={style.cook} onClick={cookIt}>🍳</button>
+        <button class={style.deliver} onClick={deliverIt}>🚚</button>
     </div>
 </div>
 )
