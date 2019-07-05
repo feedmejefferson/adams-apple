@@ -1,9 +1,9 @@
 import { Component, h } from "preact";
 import { Store } from "unistore";
 import { globalState } from "../../state";
+import { dilemma as newDilemma } from "../../state/constants"
 import { IndexedTree } from "../../state/tree";
 import { loadBranch } from "../../state/tree-loader";
-import { dilemma as newDilemma } from "../../state/types"
 import { Container } from "../container"
 
 

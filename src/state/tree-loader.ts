@@ -1,4 +1,6 @@
 import { Store } from "unistore";
+import { globalState } from ".";
+import { basket, updateBasket } from "./constants";
 import { IndexedTree } from "./tree";
 import { AppState } from "./types";
 
@@ -31,12 +33,43 @@ export function childPartials(branch: number): number[] {
 }
 
 const partialUrl = (branch: number) => (`/assets/meta/indexed-tree.${branch}.json`)
+const basketUrl = (branch: number) => (`/assets/meta/basket.${branch}.json`)
 
 // load the bootstrap partial tree syncronously
-export function loadBootstrap(): IndexedTree {
-    return new IndexedTree(JSON.parse('{"8":"0000004","9":"0000261","10":"0000997","11":"0000879","12":"0000091","13":"0000473","14":"0000549","15":"0000117"}'));
+
+
+function fetchBasket(nodeId: number): Promise<void> {
+    return fetch(basketUrl(nodeId))
+    // for now we'll just filter out non existent responses
+    .then(res => {
+        if(res.ok){
+            return res; 
+        }
+        throw Error();
+    })
+    .then(res => res.json())
+    .then(json => { 
+        updateBasket(json);
+    })
 }
 
+function fetchPartial(nodeId: number): Promise<void> {
+    return fetch(partialUrl(nodeId))
+    // for now we'll just filter out non existent responses
+    .then(res => {
+        if(res.ok){
+            // TODO: make this less hacky
+            fetchBasket(nodeId);
+            return res; 
+        }
+        throw Error();
+    })
+    .then(res => res.json())
+    .then(json => { 
+        const { tree } = globalState.getState();
+        globalState.setState({tree: tree.expandBranch(nodeId, json)});
+    })
+}
 // asyncronously load and expand requested branches in the background
 // update the store's global state when they've loaded
 export function loadBranch(store: Store<AppState>, branch: number) {
@@ -50,15 +83,7 @@ export function loadBranch(store: Store<AppState>, branch: number) {
    const { tree } = store.getState();
    const nodeToExpand = tree.ancestorNodeId(branch);
    if(nodeToExpand) { 
-    fetch(partialUrl(nodeToExpand))
-    // for now we'll just filter out non existent responses
-    .then(res => {if(!res.ok){throw Error()} return res; })
-    .then(res => res.json())
-    .then(json => { 
-// tslint:disable-next-line: no-shadowed-variable
-        const { tree } = store.getState();
-        store.setState({tree: tree.expandBranch(nodeToExpand, json)});
-    })
+    fetchPartial(nodeToExpand)
     // finally, keep calling recursively until we've caught up
     .then(() => loadBranch(store, branch));
     return;
@@ -75,15 +100,7 @@ export function loadBranch(store: Store<AppState>, branch: number) {
     }
     childPartials(branch)
     .forEach(b => {
-        fetch(partialUrl(b))
-        // for now we'll just filter out non existent responses
-        .then(res => {if(!res.ok){throw Error()} return res; })
-        .then(res => res.json())
-        .then(json => { 
-// tslint:disable-next-line: no-shadowed-variable
-            const { tree } = store.getState();
-            store.setState({tree: tree.expandBranch(b, json)});
-        })
+        fetchPartial(b);
     });
         
 }

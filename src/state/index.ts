@@ -1,6 +1,7 @@
 import createStore, {Store} from "unistore";
+import { food, newAppState, randomDilemma } from "./constants";
 import { loadBranch } from "./tree-loader";
-import { AppState, food, newAppState, randomDilemma } from "./types";
+import { AppState } from "./types";
 
 export const globalState = createStore<AppState>(newAppState());
 

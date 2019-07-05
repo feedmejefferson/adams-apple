@@ -1,7 +1,7 @@
 import { Component, h } from "preact";
 import { connect } from "unistore/preact";
 import { actions, globalState } from "../../state"
-import { food } from "../../state/types"
+import { food } from "../../state/constants"
 import * as style from "./style.css";
 
 export const Recommendation = connect('recommendations', actions)(({recommendations, accept, reject, startOver}: any) => 

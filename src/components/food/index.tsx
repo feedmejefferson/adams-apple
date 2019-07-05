@@ -1,5 +1,5 @@
 import { Component, h } from "preact";
-import { food } from "../../state/types";
+import { food } from "../../state/constants";
 import { Attribution } from "../attribution";
 import * as style from "./style.css";
 

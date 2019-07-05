@@ -1,13 +1,13 @@
 import { Component, h } from "preact";
-import { food } from "../../state/types";
+import { food } from "../../state/constants";
 import * as style from "./style.css";
 
 interface Props {
     title: string;
     originTitle: string;
     originUrl: string;
-    author: string;
-    authorProfileUrl: string;
+    author?: string;
+    authorProfileUrl?: string;
     license: string;
     licenseUrl: string;
 }

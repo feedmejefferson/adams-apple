@@ -1,5 +1,5 @@
 import { actions, globalState } from "../state";
-import { AppState, Choice, Dilemma, dilemma, food, newAppState } from "../state/types";
+import { dilemma, food, newAppState } from "../state/constants";
 
 describe("Reducer tests", () => {
     test("choice reducer updates choices", () => {
