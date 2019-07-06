@@ -5,7 +5,7 @@ import * as style from "./style.css";
 
 export const Header = connect([], actions)(({startOver}: any) =>         
 <header class={style.header}>
-<h1><a href="/" onClick={startOver}>Adams 🍎</a></h1>
+<h1><a href="#" onClick={startOver}>Adams 🍎</a></h1>
 </header>
 )
 

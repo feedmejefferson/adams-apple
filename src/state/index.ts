@@ -1,11 +1,14 @@
+import { route } from "preact-router";
 import createStore, {Store} from "unistore";
+// import unistoreDevTools from "unistore/devtools";
 import { food, newAppState, randomDilemma } from "./constants";
 import { loadBranch } from "./tree-loader";
-import { AppState, Phase } from "./types";
+import { AppState } from "./types";
 
+// export const globalState = unistoreDevTools(createStore<AppState>(newAppState()));
 export const globalState = createStore<AppState>(newAppState());
 
-// globalState.subscribe((state: AppState) => console.log(state));
+ globalState.subscribe((state: AppState) => console.log(state));
 
 function chooseSide(state: AppState, side: number) {
     // A = 0/falsy, B = 1/truthy
@@ -40,22 +43,40 @@ function chooseSide(state: AppState, side: number) {
         const finalists = Array.from(new Set<string>(contenders));
         const recommendations = finalists.map(f => food(f));
 
-        window.history.pushState("object or string", "Recommended Food", `/food/${recommendations[recommendations.length-1].id}`);
+        const path = `/food/${recommendations[recommendations.length-1].id}`;
+        // @ts-ignore
+        gtag('config', 'UA-142228380-1', {
+            'page_path': path
+        });
+
+        route(path);
+//        window.history.pushState("object or string", "Recommended Food", path);
         return {
             branch,
-            phase: Phase.RECOMMENDATION,
             recommendations,
             choices: [...state.choices, choiceMade ]
         };
     } 
     const dilemma = randomDilemma(state.tree, branch)
-    window.history.pushState("object or string", "Another Food Dilemma", `/choice/?branch=${branch}&a=${dilemma.a.id}&b=${dilemma.b.id}`);
+    route(`/choice/?branch=${branch}&a=${dilemma.a.id}&b=${dilemma.b.id}`);
+//    window.history.pushState("object or string", "Another Food Dilemma", `/choice/?branch=${branch}&a=${dilemma.a.id}&b=${dilemma.b.id}`);
     return {
         branch,
         dilemma,
         choices: [...state.choices, choiceMade ]
     };    
 }
+function startOverState() {
+    const tree = globalState.getState().tree;
+    const path = '/';
+    // @ts-ignore
+    gtag('config', 'UA-142228380-1', {
+        'page_path': path
+    });
+
+    route(path);
+}
+
 
 export const actions = (store: Store<AppState>) => ({
 
@@ -68,14 +89,19 @@ export const actions = (store: Store<AppState>) => ({
     },
 
     accept({analytics, recommendations}: AppState) {
+        const path = `/feedme/${recommendations[recommendations.length-1].id}`;
         if(analytics) { 
             // @ts-ignore
             gtag('event', 'accept', {
                 'event_category': `/food/${recommendations[recommendations.length-1].id}`
             });
+            // @ts-ignore
+            gtag('config', 'UA-142228380-1', {
+                'page_path': path
+            });
         }
-        window.history.pushState("object or string", "Another Food Dilemma", `/feedme/${recommendations[recommendations.length-1].id}`);
-        return({phase: Phase.PROCUREMENT})
+
+        route(path);
     },
     
     reject({analytics, recommendations, choices}: AppState) {
@@ -86,8 +112,7 @@ export const actions = (store: Store<AppState>) => ({
             });
         }
         if(recommendations.length===1) {
-            // start over
-            window.location.href="/";
+            return (startOverState());
         }
         const newRecs= [...recommendations];
         newRecs.pop();
@@ -98,12 +123,12 @@ export const actions = (store: Store<AppState>) => ({
 
     cookIt({recommendations}: AppState) {
         const f = recommendations[recommendations.length-1].title;
-        window.location.href=`https://www.google.com/search?q=${f}+recipes`;
+        window.open(`https://www.google.com/search?q=${f}+recipes`, '_blank');
 
     },
     deliverIt({recommendations}: AppState) {
         const f = recommendations[recommendations.length-1].title;
-        window.location.href=`https://www.google.com/search?q=${f}+delivery+near+me`;
+        window.open(`https://www.google.com/search?q=${f}+delivery+near+me`, '_blank');
 
     },
 
@@ -111,18 +136,9 @@ export const actions = (store: Store<AppState>) => ({
         loadBranch(store, branch);
     },
 
-    startOver({ tree }: AppState) {
-        // TODO: figure out why dilemmas stop rerendering if I don't us
-        // this "nuclear" option of doing a full reload. It isn't the worst
-        // option, but it would be nice to manage the transition a bit better.
-        window.location.href="/";
-        return {
-            branch: 1,
-            dilemma: randomDilemma(tree, 1),
-            recommendation: undefined,
-            choices: []
-        };
-    },
+    startOver() {
+        return(startOverState());
+    }
 
 });
 
