@@ -42,8 +42,9 @@ function chooseSide(state: AppState, side: number) {
         const contenders = chosen.filter(c => !notChosen.includes(c));
         const finalists = Array.from(new Set<string>(contenders));
         const recommendations = finalists.map(f => food(f));
+        const likes = recommendations.map(f => f.id).join("~");
 
-        const path = `/food/${recommendations[recommendations.length-1].id}`;
+        const path = `/recommendation?likes=${likes}`;
         // @ts-ignore
         gtag('config', 'UA-142228380-1', {
             'page_path': path
@@ -116,6 +117,8 @@ export const actions = (store: Store<AppState>) => ({
         }
         const newRecs= [...recommendations];
         newRecs.pop();
+        const likes = newRecs.map(f => f.id).join("~");
+        route(`/recommendation?likes=${likes}`)
         return({recommendations: newRecs});
 
 

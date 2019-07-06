@@ -16,10 +16,11 @@ export const Recommendation = connect('recommendations', actions)(({recommendati
 )
 
 interface Props {
-    id: string;
+    likes: string;
 }
 
-export const RecRoute = ({id}: Props) => {
-    globalState.setState({recommendations: [food(id)]});
+export const RecRoute = ({likes}: Props) => {
+    const recommendations = likes.split("~").map(id => food(id));
+    globalState.setState({recommendations});
     return <Recommendation/>
 }
