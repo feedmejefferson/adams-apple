@@ -2,17 +2,16 @@ import { Component, h } from "preact";
 import { connect } from "unistore/preact";
 import { actions, globalState } from "../../state"
 import { food } from "../../state/constants"
+import { Food } from "../food";
 import * as style from "./style.css";
 
 export const Procurement = connect('recommendations', actions)(({recommendations, cookIt, deliverIt}: any) => 
-<div class={style.procurement}
-    style={`background-image: url(/assets/images/${recommendations[recommendations.length-1].id}.jpg)`} 
->
-    <div class={style.methods}>
-        <button class={style.cook} onClick={cookIt}>🍳</button>
-        <button class={style.deliver} onClick={deliverIt}>🚚</button>
-    </div>
-</div>
+    <Food id={recommendations[recommendations.length-1].id} >
+        <div class={style.methods}>
+            <button class={style.cook} onClick={cookIt}>🍳</button>
+            <button class={style.deliver} onClick={deliverIt}>🚚</button>
+        </div>
+    </Food>
 )
 
 interface Props {

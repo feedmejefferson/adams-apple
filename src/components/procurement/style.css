@@ -14,21 +14,21 @@
 
 .methods {
     position: absolute;
-    bottom: 1rem;
+    height: 100%;
     width: 100%;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+    align-items: center;
     justify-content: center;
 }
 
 .cook,
 .deliver {
     display: flexbox;
-    bottom: 100px;
-    height: 6rem;
-    width: 6rem;
+    height: 10rem;
+    width: 10rem;
     border-radius: 50%;
-    font-size: 3rem;
+    font-size: 4rem;
     margin: 1rem;
 }
 

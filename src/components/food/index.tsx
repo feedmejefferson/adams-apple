@@ -27,7 +27,8 @@ export class Food extends Component<Props> {
             style={`background-image: url(/assets/images/${id}.jpg)`} 
             >
                 {a}
-                { onClick && <button onClick={onClick}>{f.title}</button> }
+                { onClick && <button class={style.image} onClick={onClick}>{f.title}</button> }
+                {this.props.children}
             </div>
         );
     }
