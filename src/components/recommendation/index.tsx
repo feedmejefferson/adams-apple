@@ -20,7 +20,9 @@ interface Props {
 }
 
 export const RecRoute = ({likes}: Props) => {
-    const recommendations = likes.split("~").map(id => food(id));
-    globalState.setState({recommendations});
+    if(likes) {
+        const recommendations = likes.split("~").map(id => food(id));
+        globalState.setState({recommendations});
+    }
     return <Recommendation/>
 }

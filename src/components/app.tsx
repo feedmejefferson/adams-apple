@@ -37,7 +37,7 @@ export default class App extends Component {
                         <Route path="/" component={StartRoute} />
                         <Route path="/choice" component={DilemmaRoute} />
                         <Route path="/recommendation" component={RecRoute} />
-                        <Route path="/feedme/:id" component={ProcurementRoute} />
+                        <Route path="/feedme" component={ProcurementRoute} />
                         <Route path="/food/:id" component={Food} />
                     </Router>
                 </div>

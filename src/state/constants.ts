@@ -1,11 +1,11 @@
 import { IndexedTree } from './tree';
-import { AppState, Dilemma, Food } from './types';
+import { AppState, Dilemma, Food, FoodDetail } from './types';
 
 
 
 export const bootstrapTree: IndexedTree = new IndexedTree({"8":"0000004","9":"0000261","10":"0000997","11":"0000879","12":"0000091","13":"0000473","14":"0000549","15":"0000117"});
 
-export const basket: {[key:string]:Food;} = {"0000004":{"originUrl":"https://www.pexels.com/photo/461198","license":"Public Domain","descriptiveTags":["mexican food"],"containsTags":["chicken","lime","rice","onion","pepper","tortilla","cheese","burrito"],"id":"0000004","licenseUrl":"https://creativecommons.org/publicdomain/","title":"Chicken Burrito","originTitle":"Tacos With Lime","isTags":["Chicken Burrito"]}
+export const basket: {[key:string]:FoodDetail;} = {"0000004":{"originUrl":"https://www.pexels.com/photo/461198","license":"Public Domain","descriptiveTags":["mexican food"],"containsTags":["chicken","lime","rice","onion","pepper","tortilla","cheese","burrito"],"id":"0000004","licenseUrl":"https://creativecommons.org/publicdomain/","title":"Chicken Burrito","originTitle":"Tacos With Lime","isTags":["Chicken Burrito"]}
 ,"0000261":{"id":"0000261","licenseUrl":"https://creativecommons.org/publicdomain/","title":"Chicken and Broccoli","originTitle":"Broccoli in Bowl","isTags":["Chicken","Broccoli"],"originUrl":"https://www.pexels.com/photo/262973","license":"Public Domain","descriptiveTags":["Meat","Vegetables"],"containsTags":[]}
 ,"0000997":{"originUrl":"https://www.pexels.com/photo/350343","license":"Public Domain","descriptiveTags":["Deli","Lunch","Meat","Vegetable","Pork","Pig","beverage"],"containsTags":["bread","toast","coffee"],"id":"0000997","licenseUrl":"https://creativecommons.org/publicdomain/","title":"BLT Sandwich","originTitle":"Sliced Sandwich","isTags":["BLT","Sandwich","Bacon","Lettuce","Tomato"]}
 ,"0000879":{"containsTags":["Spinach"],"id":"0000879","licenseUrl":"https://creativecommons.org/publicdomain/","title":"Mixed Greens Salad with pomegranate and sprouts","originTitle":"Close Up Photography of Bowl Filled With Spice Seasonings","isTags":["Salad","Mixed Greens","pomegranate","pumpkin seeds","sprouts"],"originUrl":"https://www.pexels.com/photo/628777","license":"Public Domain","descriptiveTags":["Asian","Vegetarian","Vegetables"]}
@@ -17,7 +17,7 @@ export const basket: {[key:string]:Food;} = {"0000004":{"originUrl":"https://www
 
 
 // TODO: this is a short term lazy hack -- find a better immutable state based approach
-export function updateBasket(partial: {[key:string]:Food;}) {
+export function updateBasket(partial: {[key:string]:FoodDetail;}) {
     Object.keys(partial).map(k => basket[k]=partial[k]);
 }
 
@@ -50,6 +50,11 @@ export const EMPTY_FOOD = {
 }
 
 export const food = (id: string):Food => {
-    const f = basket[id];
-    return f ? f : { id, ...EMPTY_FOOD};
+    return {id};
+}
+
+export const foodDetail = (id: string|Food):FoodDetail => {
+    const fid = typeof id === "string" ? (id as string) : (id as Food).id
+    const f = basket[fid];
+    return f ? f : { id: fid, ...EMPTY_FOOD};
 }

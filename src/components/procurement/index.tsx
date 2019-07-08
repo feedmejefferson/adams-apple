@@ -16,10 +16,13 @@ export const Procurement = connect('recommendations', actions)(({recommendations
 )
 
 interface Props {
-    id: string;
+    likes: string;
 }
 
-export const ProcurementRoute = ({id}: Props) => {
-    globalState.setState({recommendations: [food(id)]});
+export const ProcurementRoute = ({likes}: Props) => {
+    if(likes) {
+        const recommendations = likes.split("~").map(id => food(id));
+        globalState.setState({recommendations});
+    }
     return <Procurement/>
 }

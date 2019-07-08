@@ -1,5 +1,10 @@
 import { IndexedTree } from "./tree";
 
+export enum Side { 
+    A = 0,
+    B = 1
+}
+
 export interface Dilemma {
     a: Food,
     b: Food
@@ -18,6 +23,10 @@ export interface AppState {
 }
 
 export interface Food  {
+    id: string;
+}
+
+export interface FoodDetail  {
     id: string;
     title: string;
     originTitle: string;

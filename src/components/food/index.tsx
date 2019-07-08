@@ -1,17 +1,17 @@
 import { Component, h } from "preact";
-import { food } from "../../state/constants";
+import { foodDetail } from "../../state/constants";
 import { Attribution } from "../attribution";
 import * as style from "./style.css";
 
 interface Props {
     id: string;
-    onClick?: JSX.EventHandler<MouseEvent>
+    onClick?: JSX.EventHandler<MouseEvent>;
 }
 
 
 export class Food extends Component<Props> {
     public render({ id, onClick }: Props) {
-        const f = food(id);
+        const f = foodDetail(id);
         const a = Attribution({...f});
         /*
         it's important that the attribution section is rendered before
