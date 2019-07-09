@@ -27,6 +27,10 @@ export const event = (action: string, category: string, label?: string, value?: 
 export default class Tracker extends Component {
     public constructor() {
         super()
+        // At the very least, let's respect the do not track header for now
+        // @ts-ignore
+        const dnt = (navigator && navigator.doNotTrack) || (window && window.doNotTrack) || (navigator && navigator.msDoNotTrack);
+        if(dnt) { globalState.setState({analytics: !dnt})}
         suppress = !globalState.getState().analytics;
         globalState.subscribe(({analytics}: AppState) => {suppress= !analytics});
     }
