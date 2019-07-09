@@ -1,5 +1,6 @@
 import { route } from "preact-router";
 import createStore, {Store} from "unistore";
+import { event, pageview } from "../components/tracker"
 // import unistoreDevTools from "unistore/devtools";
 import { food, foodDetail, newAppState, randomDilemma } from "./constants";
 import { loadBranch } from "./tree-loader";
@@ -25,20 +26,14 @@ function chooseSide(state: AppState, side: number) {
     .filter(f => (f.id!==notChosen.id && f.id!==chosen.id));
     recommendations.push(chosen);
 
-    if(state.analytics){
-    // @ts-ignore
-    gtag('event', 'prefer', {
-        'event_category': `/food/${choiceMade.chosen.id}`,
-        'event_label': `branch=${state.branch}`,
-        'value': choices.length
-        });
-    // @ts-ignore
-    gtag('event', 'decline', {
-        'event_category': `/food/${choiceMade.notChosen.id}`,
-        'event_label': `branch=${state.branch}`,
-        'value': choices.length
-        });
-    }
+    event('prefer', 
+        `/food/${choiceMade.chosen.id}`,
+        `branch=${state.branch}`, 
+        choices.length);
+    event('decline', 
+        `/food/${choiceMade.notChosen.id}`,
+        `branch=${state.branch}`,
+        choices.length);
     
     return {
         choices,
@@ -59,27 +54,12 @@ export const actions = (store: Store<AppState>) => ({
     accept({analytics, recommendations}: AppState) {
         const likes = recommendations.map(f=>f.id).join("~");
         const path = `/feedme?likes=${likes}`;
-        if(analytics) { 
-            // @ts-ignore
-            gtag('event', 'accept', {
-                'event_category': `/food/${recommendations[recommendations.length-1].id}`
-            });
-            // @ts-ignore
-            gtag('config', 'UA-142228380-1', {
-                'page_path': path
-            });
-        }
-
+        event('accept', `/food/${recommendations[recommendations.length-1].id}`);
         route(path);
     },
     
     reject({analytics, recommendations}: AppState) {
-        if(analytics) { 
-            // @ts-ignore
-            gtag('event', 'reject', {
-                'event_category': `/food/${recommendations[recommendations.length-1].id}`
-            });
-        }
+        event('reject', `/food/${recommendations[recommendations.length-1].id}`);
         const newRecs= [...recommendations];
         newRecs.pop();
         const likes = newRecs.map(f => f.id).join("~");
@@ -94,24 +74,14 @@ export const actions = (store: Store<AppState>) => ({
     cookIt({recommendations, analytics}: AppState) {
         const f = recommendations[recommendations.length-1];
         const search = foodDetail(f).title;
-        if(analytics) { 
-            // @ts-ignore
-            gtag('event', 'recipe', {
-                'event_category': `/food/${f.id}`
-            });
-        }
+        event('recipe', `/food/${f.id}`);
         window.open(`https://www.google.com/search?q=${search}+recipes`, '_blank');
 
     },
     deliverIt({recommendations, analytics}: AppState) {
         const f = recommendations[recommendations.length-1];
         const search = foodDetail(f).title;
-        if(analytics) { 
-            // @ts-ignore
-            gtag('event', 'deliver', {
-                'event_category': `/food/${f.id}`
-            });
-        }
+        event('deliver', `/food/${f.id}`);
         window.open(`https://www.google.com/search?q=${search}+delivery+near+me`, '_blank');
 
     },
