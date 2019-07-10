@@ -15,6 +15,7 @@ export interface Choice {
 }
 export interface AppState {
     tree: IndexedTree,
+    basket: FoodBasket,
     branch: number,
     dilemma: Dilemma,
     recommendations: Food[], 
@@ -38,4 +39,8 @@ export interface FoodDetail  {
     containsTags: string[];
     isTags?: string[];
     descriptiveTags?: string[];
+}
+
+export interface FoodBasket {
+    [key:string]:FoodDetail;
 }

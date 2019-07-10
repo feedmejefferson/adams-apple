@@ -1,6 +1,5 @@
 import { Store } from "unistore";
 import { globalState } from ".";
-import { basket, updateBasket } from "./constants";
 import { IndexedTree } from "./tree";
 import { AppState } from "./types";
 
@@ -37,6 +36,7 @@ const basketUrl = (branch: number) => (`/assets/meta/basket.${branch}.json`)
 
 // load the bootstrap partial tree syncronously
 
+const noResponse = Error("no response");
 
 function fetchBasket(nodeId: number): Promise<void> {
     return fetch(basketUrl(nodeId))
@@ -45,12 +45,18 @@ function fetchBasket(nodeId: number): Promise<void> {
         if(res.ok){
             return res; 
         }
-        throw Error();
+        throw noResponse;
     })
     .then(res => res.json())
     .then(json => { 
-        updateBasket(json);
-    })
+        const oldBasket  = globalState.getState().basket;
+        const basket = { ...oldBasket, ...json}
+        globalState.setState({basket});
+    }).catch(err => {if(err===noResponse) {
+//        console.log("empty respose, ignoring");
+    }else{
+        throw Error("problems loading partial");
+    }})
 }
 
 function fetchPartial(nodeId: number): Promise<void> {
@@ -62,13 +68,18 @@ function fetchPartial(nodeId: number): Promise<void> {
             fetchBasket(nodeId);
             return res; 
         }
-        throw Error();
+        throw noResponse;
+        
     })
     .then(res => res.json())
     .then(json => { 
         const { tree } = globalState.getState();
         globalState.setState({tree: tree.expandBranch(nodeId, json)});
-    })
+    }).catch(err => {if(err===noResponse) {
+//        console.log("empty respose, ignoring");
+    }else{
+        throw Error("problems loading partial");
+    }})
 }
 // asyncronously load and expand requested branches in the background
 // update the store's global state when they've loaded

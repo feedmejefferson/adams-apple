@@ -9,17 +9,19 @@ import { Side } from "../../state/types";
 import { Food } from "../food";
 import * as style from "./style.css";
 
-export const Dilemma = connect(['dilemma','tree', 'branch'], actions)(({dilemma, tree, branch, chooseA, chooseB, expandBranch}: any) => {
+export const Dilemma = connect(['dilemma','tree', 'branch','basket'], actions)(({dilemma, tree, branch, basket, chooseA, chooseB, expandBranch}: any) => {
     
     const a = routeForBranch(Side.A);
     const b = routeForBranch(Side.B);
+    const foodA = basket[dilemma.a.id];
+    const foodB = basket[dilemma.b.id];
 
     return <div class={style.choice}>
         <div class={style.a}>
-            <Food id={dilemma.a.id} onClick={() => {chooseA();route(a);expandBranch();}}/>
+            <Food id={dilemma.a.id} detail={foodA} onClick={() => {chooseA();route(a);expandBranch();}}/>
         </div>
         <div class={style.a}>
-            <Food id={dilemma.b.id} onClick={() => {chooseB();route(b);expandBranch();}}/>
+            <Food id={dilemma.b.id} detail={foodB} onClick={() => {chooseB();route(b);expandBranch();}}/>
         </div>
     </div>
 })

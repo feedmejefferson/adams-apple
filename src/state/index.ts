@@ -1,13 +1,41 @@
 import { route } from "preact-router";
+// @ts-ignore
+import persistStore from "unissist";
+// @ts-ignore
+import localStorageAdapter from "unissist/integrations/localStorageAdapter"
 import createStore, {Store} from "unistore";
 import { event, pageview } from "../components/tracker"
 // import unistoreDevTools from "unistore/devtools";
-import { food, foodDetail, newAppState, randomDilemma } from "./constants";
+import { food, newAppState, randomDilemma } from "./constants";
+import { IndexedTree } from "./tree";
 import { loadBranch } from "./tree-loader";
 import { AppState, Side } from "./types";
 
 // export const globalState = unistoreDevTools(createStore<AppState>(newAppState()));
 export const globalState = createStore<AppState>(newAppState());
+
+
+// persist the store 
+const adapter = localStorageAdapter();
+const config = {
+    version: 1,
+    debounceType: 100,
+    // @ts-ignore
+    map: state => ({
+        tree: state.tree.nodes, 
+        basket: state.basket, 
+        choices: state.choices, 
+        recommendations: state.recommendations
+    }),
+    // @ts-ignore
+    hydration: state => ({
+        tree: new IndexedTree(state.tree),
+        basket: state.basket, 
+        choices: state.choices, 
+        recommendations: state.recommendations
+    })
+}
+persistStore(globalState, adapter, config);
 
 // globalState.subscribe((state: AppState) => console.log(state));
 
@@ -71,16 +99,16 @@ export const actions = (store: Store<AppState>) => ({
         return({recommendations: newRecs})
     },
 
-    cookIt({recommendations, analytics}: AppState) {
+    cookIt({recommendations, basket}: AppState) {
         const f = recommendations[recommendations.length-1];
-        const search = foodDetail(f).title;
+        const search = basket[f.id].title;
         event('recipe', `/food/${f.id}`);
         window.open(`https://www.google.com/search?q=${search}+recipes`, '_blank');
 
     },
-    deliverIt({recommendations, analytics}: AppState) {
+    deliverIt({recommendations, basket}: AppState) {
         const f = recommendations[recommendations.length-1];
-        const search = foodDetail(f).title;
+        const search = basket[f.id].title;
         event('deliver', `/food/${f.id}`);
         window.open(`https://www.google.com/search?q=${search}+delivery+near+me`, '_blank');
 

@@ -3,7 +3,7 @@ import { globalState } from "../../state"
 import { AppState } from "../../state/types";
 
 // this seems very ugly. maybe one day I'll understand how to make it better
-let suppress = false;
+let suppress = true;  // defaulting to true for testing
 const GA_TRACKING_ID = 'UA-142228380-1'
 
 export const pageview = (url: string) => {

@@ -6,7 +6,7 @@ import { Component, h } from "preact";
 import { Route, Router, RouterOnChangeArgs } from "preact-router";
 
 import { DilemmaRoute } from "./dilemma";
-import { Food } from "./food";
+import { FoodRoute } from "./food";
 import { Header } from "./header";
 import { ProcurementRoute } from "./procurement"
 import { RecRoute } from "./recommendation"
@@ -38,7 +38,7 @@ export default class App extends Component {
                         <Route path="/choice" component={DilemmaRoute} />
                         <Route path="/recommendation" component={RecRoute} />
                         <Route path="/feedme" component={ProcurementRoute} />
-                        <Route path="/food/:id" component={Food} />
+                        <Route path="/food/:id" component={FoodRoute} />
                     </Router>
                 </div>
             </Provider>
