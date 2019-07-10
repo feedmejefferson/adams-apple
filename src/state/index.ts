@@ -9,7 +9,7 @@ import { event, pageview } from "../components/tracker"
 import { food, newAppState, randomDilemma } from "./constants";
 import { IndexedTree } from "./tree";
 import { loadBranch } from "./tree-loader";
-import { AppState, Side } from "./types";
+import { AppState, Side, UserConsent } from "./types";
 
 // export const globalState = unistoreDevTools(createStore<AppState>(newAppState()));
 export const globalState = createStore<AppState>(newAppState());
@@ -25,14 +25,16 @@ const config = {
         tree: state.tree.nodes, 
         basket: state.basket, 
         choices: state.choices, 
-        recommendations: state.recommendations
+        recommendations: state.recommendations,
+        analytics: state.analytics
     }),
     // @ts-ignore
     hydration: state => ({
         tree: new IndexedTree(state.tree),
         basket: state.basket, 
         choices: state.choices, 
-        recommendations: state.recommendations
+        recommendations: state.recommendations,
+        analytics: state.analytics ? state.analytics : UserConsent.Unknown
     })
 }
 persistStore(globalState, adapter, config);
@@ -112,6 +114,14 @@ export const actions = (store: Store<AppState>) => ({
         event('deliver', `/food/${f.id}`);
         window.open(`https://www.google.com/search?q=${search}+delivery+near+me`, '_blank');
 
+    },
+
+    consent() {
+        return({analytics: UserConsent.AnalyticsAllowed})
+    },
+
+    noConsent() {
+        return({analytics: UserConsent.NoTracking})
     },
 
     expandBranch({ branch }: AppState) {

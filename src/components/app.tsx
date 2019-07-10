@@ -5,13 +5,14 @@ import { AppState } from "../state/types"
 import { Component, h } from "preact";
 import { Route, Router, RouterOnChangeArgs } from "preact-router";
 
+import { ConsentPopup } from "./consent";
 import { DilemmaRoute } from "./dilemma";
 import { FoodRoute } from "./food";
 import { Header } from "./header";
 import { ProcurementRoute } from "./procurement"
 import { RecRoute } from "./recommendation"
 import { StartRoute } from "./start-route";
-import Tracker from "./tracker";
+import { Tracker } from "./tracker";
 
 // globalState.subscribe((state: AppState) => console.log(state));
 
@@ -40,6 +41,7 @@ export default class App extends Component {
                         <Route path="/feedme" component={ProcurementRoute} />
                         <Route path="/food/:id" component={FoodRoute} />
                     </Router>
+                    <ConsentPopup />
                 </div>
             </Provider>
         );

@@ -5,6 +5,12 @@ export enum Side {
     B = 1
 }
 
+export enum UserConsent {
+    Unknown = 0,
+    NoTracking = 1,
+    AnalyticsAllowed = 2
+}
+
 export interface Dilemma {
     a: Food,
     b: Food
@@ -20,7 +26,7 @@ export interface AppState {
     dilemma: Dilemma,
     recommendations: Food[], 
     choices: Choice[],
-    analytics?: any
+    analytics: UserConsent
 }
 
 export interface Food  {

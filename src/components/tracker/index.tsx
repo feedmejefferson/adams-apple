@@ -1,6 +1,7 @@
-import { Component, h } from "preact";
-import { globalState } from "../../state"
-import { AppState } from "../../state/types";
+import { h } from "preact";
+import { connect } from "unistore/preact";
+// import { actions } from "../../state"
+import { UserConsent } from "../../state/types";
 
 // this seems very ugly. maybe one day I'll understand how to make it better
 let suppress = true;  // defaulting to true for testing
@@ -24,31 +25,29 @@ export const event = (action: string, category: string, label?: string, value?: 
     });
 }
 
-export default class Tracker extends Component {
-    public constructor() {
-        super()
-        // At the very least, let's respect the do not track header for now
-        // @ts-ignore
-        const dnt = (navigator && navigator.doNotTrack) || (window && window.doNotTrack) || (navigator && navigator.msDoNotTrack);
-        if(dnt) { globalState.setState({analytics: !dnt})}
-        suppress = !globalState.getState().analytics;
-        globalState.subscribe(({analytics}: AppState) => {suppress= !analytics});
-    }
+// for some reason this is mounting the state has been initialized
+// I don't know why, but it rerenders itself eventually so as long 
+// as we don't load the scripts by default and wait until we're sure
+// that we have consent it seems to be work. I've had to leave actions
+// out of the signature though -- fortunately we don't need any.
+export const Tracker = connect('analytics')(({analytics}: any) => {
+    // @ts-ignore
+    const dnt = (navigator && navigator.doNotTrack) || (window && window.doNotTrack) || (navigator && navigator.msDoNotTrack);
+    suppress = dnt || (analytics !== UserConsent.AnalyticsAllowed)
+    if(suppress) {return  <div/>}
+    return (
+        <div>
+            
+            <script async={true} src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
+            <script>
+            { `window.dataLayer = window.dataLayer || []; \
+            function gtag(){dataLayer.push(arguments);} \
+            gtag('js', new Date()); \
+            gtag('config', '${GA_TRACKING_ID}');`}
+            </script>
+        </div> 
+    );
 
-    public render() {
-        // hack to disable tracking
-        if(suppress) {return  <div/>}
-        return (
-            <div>
-                
-                <script async={true} src={`https://www.googletagmanager.com/gtag/js?id=${GA_TRACKING_ID}`} />
-                <script>
-                { `window.dataLayer = window.dataLayer || []; \
-                function gtag(){dataLayer.push(arguments);} \
-                gtag('js', new Date()); \
-                gtag('config', '${GA_TRACKING_ID}');`}
-                </script>
-            </div> 
-        );
-    }
-}
+})
+
+

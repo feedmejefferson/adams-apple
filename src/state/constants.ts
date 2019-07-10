@@ -1,5 +1,5 @@
 import { IndexedTree } from './tree';
-import { AppState, Dilemma, Food, FoodDetail } from './types';
+import { AppState, Dilemma, Food, FoodDetail, UserConsent } from './types';
 
 
 
@@ -31,7 +31,7 @@ export function newAppState(): AppState {
     const tree = bootstrapTree;
     const basket = coreBasket;
     const firstDilemma = randomDilemma(tree, 1);
-    return {tree, basket, branch: 1, dilemma: firstDilemma, recommendations: [], choices:[], analytics: true }
+    return {tree, basket, branch: 1, dilemma: firstDilemma, recommendations: [], choices:[], analytics: UserConsent.Unknown }
 } 
 
 export const EMPTY_FOOD = {
