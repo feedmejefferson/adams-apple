@@ -17,6 +17,10 @@ interface Props {
 export class Food extends Component<Props> {
     public render({ id, detail, onClick }: Props) {
         const a = Attribution({...detail});
+        const backgroundStyle = {
+            "background-image": `url(/assets/images/${id}.jpg)`,
+            "background-position": detail.position ? detail.position : "center"
+        }
         /*
         it's important that the attribution section is rendered before
         the optional button. The button takes up the full space of the
@@ -28,7 +32,7 @@ export class Food extends Component<Props> {
         return (
             <div 
             class={style.food} 
-            style={`background-image: url(/assets/images/${id}.jpg)`} 
+            style={backgroundStyle}
             >
                 {a}
                 { onClick && <button class={style.image} onClick={onClick}>{detail && detail.title}</button> }

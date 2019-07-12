@@ -42,9 +42,10 @@ export interface FoodDetail  {
     authorProfileUrl?: string;
     license: string;
     licenseUrl: string;
-    containsTags: string[];
+    containsTags?: string[];
     isTags?: string[];
     descriptiveTags?: string[];
+    position?: string;
 }
 
 export interface FoodBasket {

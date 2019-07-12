@@ -5,12 +5,18 @@
   "display": "standalone",
   "orientation": "any",
   "background_color": "#754a23",
-  "theme_color": "#754a23 ",
+  "theme_color": "#754a23",
   "icons": [
     {
       "src": "/assets/icons/adams-apple-192x192.png",
       "type": "image/png",
       "sizes": "192x192"
+    },
+    {
+      "src": "/assets/icons/adams-apple-512x512.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
+
   ]
 }

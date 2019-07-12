@@ -42,6 +42,16 @@ for id in `cat all/ids`; do cp ../../images/photos/${id}.jpg individual/${id}.js
 cd individual/
 sed -i.bk 's/\.jpg//g' *.json
 rm *.json.bk
+```
+
+remove the tags (we aren't using them for now and they're just making the load bigger)
+
+```
+sed -i.bk 's/,".[^"]*Tags":\[[^]]*\]//g' *.json
+rm *.json.bk
+```
+
+```
 cd ..
 ```
 
@@ -52,10 +62,16 @@ cd baskets/
 for basket in `ls index*.json|sed 's/[^0-9]//g'`; do (echo -n "{";for id in `cat $basket/ids`;do echo -n '"';echo -n $id;echo -n '":';cat ../individual/${id}.json;echo -n ',';done;echo -n "}")>basket.${basket}.json;done
 ```
 
-## manually drop the extra comman at the end of every basket file
+## manually drop the extra comma at the end of every basket file
+
+```
+sed -i.bk 's/,}/}/' basket.*.json
+rm *.json.bk
+```
 
 ```
 {
 ...
-},}
+}
+,}
 ```
