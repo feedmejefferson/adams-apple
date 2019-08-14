@@ -1,3 +1,4 @@
+import { Basket } from "feedme-trees";
 import { route } from "preact-router";
 // @ts-ignore
 import persistStore from "unissist";
@@ -7,7 +8,6 @@ import createStore, {Store} from "unistore";
 import { event, pageview } from "../components/tracker"
 // import unistoreDevTools from "unistore/devtools";
 import { food, newAppState, randomDilemma } from "./constants";
-import { IndexedTree } from "./tree";
 import { loadBranch } from "./tree-loader";
 import { AppState, Side, UserConsent } from "./types";
 
@@ -18,20 +18,18 @@ export const globalState = createStore<AppState>(newAppState());
 // persist the store 
 const adapter = localStorageAdapter();
 const config = {
-    version: 1,
+    version: 2,
     debounceType: 100,
     // @ts-ignore
     map: state => ({
-        tree: state.tree.nodes, 
-        basket: state.basket, 
+        basket: state.basket.serialize(), 
         choices: state.choices, 
         recommendations: state.recommendations,
         analytics: state.analytics
     }),
     // @ts-ignore
     hydration: state => ({
-        tree: new IndexedTree(state.tree),
-        basket: state.basket, 
+        basket: Basket.deserialize(state.basket), 
         choices: state.choices, 
         recommendations: state.recommendations,
         analytics: state.analytics ? state.analytics : UserConsent.Unknown
@@ -103,14 +101,14 @@ export const actions = (store: Store<AppState>) => ({
 
     cookIt({recommendations, basket}: AppState) {
         const f = recommendations[recommendations.length-1];
-        const search = basket[f.id].title;
+        const search = basket.getAttributions(f.id).title;
         event('recipe', `/food/${f.id}`);
         window.open(`https://www.google.com/search?q=${search}+recipes`, '_blank');
 
     },
     deliverIt({recommendations, basket}: AppState) {
         const f = recommendations[recommendations.length-1];
-        const search = basket[f.id].title;
+        const search = basket.getAttributions(f.id).title;
         event('deliver', `/food/${f.id}`);
         window.open(`https://www.google.com/search?q=${search}+delivery+near+me`, '_blank');
 

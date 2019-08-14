@@ -6,8 +6,8 @@ import { food, randomDilemma } from "../../state/constants"
 
 
 export const StartRoute = () => {
-    const { tree } = globalState.getState()
-    const dilemma = randomDilemma(tree, 1);
+    const { basket } = globalState.getState()
+    const dilemma = randomDilemma(basket, 1);
     globalState.setState({branch: 1, dilemma, choices: [], recommendations: []});
     route(`/choice/?branch=1&a=${dilemma.a.id}&b=${dilemma.b.id}`, true);
     return <div/>;

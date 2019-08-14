@@ -1,80 +1,43 @@
+import { Basket, depth } from "feedme-trees";
 import { Store } from "unistore";
 import { globalState } from ".";
-import { IndexedTree } from "./tree";
 import { AppState } from "./types";
 
 /*
-The depth of partial trees. The number of nodes in each partial will
-be two raised to this power. This indicates which branches new partials
-need to be loaded at.
+How frequently we should load new baskets. We need a better way
+to do this -- the core basket should indicate somehow at what branches
+baskets should be loaded, but for now I'm just hardcoding this here.
+This doesn't account for the possibility of out of order loading -- again,
+this should probably be pushed up into the basket logic -- for instance If 
+somebodygets a link from a friend and that link drops them into branch 16, 
+but they've never expanded branch 4...
 */
-const partialDepth = 3;
-
-/*
-The eagerness with which we load new partials. Zero would indicate that we 
-wait until we've reached a terminal node to load the branch, but at the
-very best that would result in a delay in showing the user a dilemma for
-the branch and at the worst it would result in us thinking that we were on
-a terminal node. Higher eagerness indicates that we have to load more partials
-(two raised to the power of the eagerness), but it means that we have more 
-variety of options to show for dilemmas that approach the end of a partial
-branch.
-*/
-const eagerness = 2;
+const basketDepthFrequency = 2;
 
 export function childPartials(branch: number): number[] {
-    const depth = Math.floor(Math.log2(branch));
-    const levelsToNext = partialDepth - (depth % partialDepth);
-    const numberOfBranches = Math.pow(2,levelsToNext);
-    const firstBranch = branch * numberOfBranches;
-    return Array.from(Array(numberOfBranches).keys()).map(x => (x + firstBranch));
+    const d = depth(branch);
+    if(d % basketDepthFrequency === 0) {
 
+    }
+//    const levelsToNext = partialDepth - (depth % partialDepth);
+//    const numberOfBranches = Math.pow(2,levelsToNext);
+//    const firstBranch = branch * numberOfBranches;
+//    return Array.from(Array(numberOfBranches).keys()).map(x => (x + firstBranch));
+return [1]
 }
 
-const partialUrl = (branch: number) => (`/assets/meta/indexed-tree.${branch}.json`)
 const basketUrl = (branch: number) => (`/assets/meta/basket.${branch}.json`)
 
 // load the bootstrap partial tree syncronously
 
 const noResponse = Error("no response");
 
-function fetchBasket(nodeId: number): Promise<void> {
-    return fetch(basketUrl(nodeId))
-    // for now we'll just filter out non existent responses
-    .then(res => {
-        if(res.ok){
-            return res; 
-        }
-        throw noResponse;
-    })
+function updateBasket(branch: number): Promise<void> {
+    return fetch(basketUrl(branch))
     .then(res => res.json())
     .then(json => { 
-        const oldBasket  = globalState.getState().basket;
-        const basket = { ...oldBasket, ...json}
-        globalState.setState({basket});
-    }).catch(err => {if(err===noResponse) {
-//        console.log("empty respose, ignoring");
-    }else{
-        throw Error("problems loading partial");
-    }})
-}
-
-function fetchPartial(nodeId: number): Promise<void> {
-    return fetch(partialUrl(nodeId))
-    // for now we'll just filter out non existent responses
-    .then(res => {
-        if(res.ok){
-            // TODO: make this less hacky
-            fetchBasket(nodeId);
-            return res; 
-        }
-        throw noResponse;
-        
-    })
-    .then(res => res.json())
-    .then(json => { 
-        const { tree } = globalState.getState();
-        globalState.setState({tree: tree.expandBranch(nodeId, json)});
+        const { basket } = globalState.getState();
+        globalState.setState({basket: basket.withExpansion(json)});
     }).catch(err => {if(err===noResponse) {
 //        console.log("empty respose, ignoring");
     }else{
@@ -85,33 +48,10 @@ function fetchPartial(nodeId: number): Promise<void> {
 // update the store's global state when they've loaded
 export function loadBranch(store: Store<AppState>, branch: number) {
 
-    /* 
-    first we have to make sure we haven't somehow landed on a branch
-    outside of our expanded tree -- this could happen if the user clicks
-    on a url that takes them straight into a branch thats deeper than the
-    bootstrap loader loads.
-    */
-   const { tree } = store.getState();
-   const nodeToExpand = tree.ancestorNodeId(branch);
-   if(nodeToExpand) { 
-    fetchPartial(nodeToExpand)
-    // finally, keep calling recursively until we've caught up
-    .then(() => loadBranch(store, branch));
-    return;
+    const d = depth(branch);
+    if(d % basketDepthFrequency === 0) {
+        updateBasket(branch)
 
-   }
-
-    // now we can eager load to expand our current branch
-    // we should eager load if we are less than the eagerness level
-    // number of steps away from the first child node
-    if(((tree.firstChildNodeId(branch)/branch)>>(eagerness+1))) {
-        // we are at least eagerness clicks away from a terminal node
-        // so we don't need to expand the branch
-        return;
     }
-    childPartials(branch)
-    .forEach(b => {
-        fetchPartial(b);
-    });
-        
+       
 }

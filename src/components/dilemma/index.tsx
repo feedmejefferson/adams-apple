@@ -1,3 +1,4 @@
+import { Basket } from "feedme-trees";
 import { Component, h } from "preact";
 import { route } from "preact-router";
 import { connect } from "unistore/preact";
@@ -9,12 +10,12 @@ import { Side } from "../../state/types";
 import { Food } from "../food";
 import * as style from "./style.css";
 
-export const Dilemma = connect(['dilemma','tree', 'branch','basket'], actions)(({dilemma, tree, branch, basket, chooseA, chooseB, expandBranch}: any) => {
+export const Dilemma = connect(['dilemma','basket'], actions)(({dilemma, basket, chooseA, chooseB, expandBranch}: any) => {
     
     const a = routeForBranch(Side.A);
     const b = routeForBranch(Side.B);
-    const foodA = basket[dilemma.a.id];
-    const foodB = basket[dilemma.b.id];
+    const foodA = basket.getAttributions(dilemma.a.id);
+    const foodB = basket.getAttributions(dilemma.b.id);
 
     return <div class={style.choice}>
         <div class={style.a}>

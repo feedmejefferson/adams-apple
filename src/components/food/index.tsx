@@ -44,7 +44,7 @@ export class Food extends Component<Props> {
 
 export const FoodRoute = ({ id }: RouteProps) => {
     const basket = globalState.getState().basket;
-    const detail = basket[id];
+    const detail = basket.getAttributions(id);
     return <Food id={id} detail={detail} />
 }
 

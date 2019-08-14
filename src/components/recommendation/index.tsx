@@ -7,7 +7,7 @@ import * as style from "./style.css";
 
 export const Recommendation = connect('recommendations,basket', actions)(({recommendations, basket, accept, reject, startOver}: any) => {
     const id = recommendations[recommendations.length-1].id;
-    const detail = basket[id];
+    const detail = basket.getAttributions(id);
     return <Food id={id} detail={detail} >
         <div class={style.feedback}>
             <button class={style.accept} onClick={accept}>👍</button>
