@@ -8,8 +8,8 @@ const basketUrl = (basketId: string) => (`/assets/meta/basket.${basketId}.json`)
 
 const noResponse = Error("no response");
 
-function updateBasket(branch: number, expansionId: string): Promise<void> {
-    return fetch(basketUrl(expansionId))
+async function updateBasket(branch: number, expansionId: string): Promise<void> {
+    await fetch(basketUrl(expansionId))
     .then(res => res.json())
     .then(json => { 
         const { basket } = globalState.getState();
@@ -22,9 +22,9 @@ function updateBasket(branch: number, expansionId: string): Promise<void> {
 }
 // asyncronously load and expand requested branches in the background
 // update the store's global state when they've loaded
-export function loadBranch(store: Store<AppState>, branch: number) {
-    const expansion = store.getState().basket.hasExpansion(branch);
-    if(expansion) {
-        updateBasket(branch, expansion)
-    }       
+export async function loadBranch(store: Store<AppState>, branch: number) {
+    while(store.getState().basket.hasExpansion(branch)) {
+        const expansion = store.getState().basket.hasExpansion(branch)
+        await updateBasket(branch, expansion);
+    }
 }
