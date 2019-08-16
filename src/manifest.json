@@ -4,8 +4,8 @@
   "start_url": "/",
   "display": "standalone",
   "orientation": "any",
-  "background_color": "#754a23",
-  "theme_color": "#754a23",
+  "background_color": "#00000080",
+  "theme_color": "#00000080",
   "icons": [
     {
       "src": "/assets/icons/adams-apple-192x192.png",

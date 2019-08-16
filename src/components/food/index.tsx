@@ -19,7 +19,7 @@ export class Food extends Component<Props> {
         const a = Attribution({...detail});
         const backgroundStyle = {
             "background-image": `url(/assets/images/${id}.jpg)`,
-            "background-position": detail.position ? detail.position : "center"
+            "background-position": detail && detail.position ? detail.position : "center"
         }
         /*
         it's important that the attribution section is rendered before
