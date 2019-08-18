@@ -8,7 +8,6 @@ const basketUrl = (basketId: string) => (`${process.env.REMOTE_ASSETS}/meta/bask
 const noResponse = Error("no response");
 
 async function updateBasket(branch: number, expansionId: string): Promise<void> {
-    console.log(basketUrl(expansionId))
     await fetch(basketUrl(expansionId))
     .then(res => res.json())
     .then(json => { 

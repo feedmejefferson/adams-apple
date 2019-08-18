@@ -1,5 +1,6 @@
 import { resolve } from "path";
 import { DefinePlugin } from "webpack";
+import CopyWebpackPlugin from "copy-webpack-plugin";
 
 export default function(config, env, helpers) {
     // Switch css-loader for typings-for-css-modules-loader, which is a wrapper
@@ -22,7 +23,14 @@ export default function(config, env, helpers) {
         "index"
     );
 
-    //    config.plugins.push( new CopyWebpackPlugin([{ context: `${__dirname}/src/assets`, from: `*.*` }]) );
+    config.plugins.push(
+        new CopyWebpackPlugin([
+            { context: `${__dirname}/src/assets`, from: `*.*` }
+        ])
+    );
+
+    // TODO: replace this with some kind of dotenv hook to pull in configuration
+    // details from a build config file
     config.plugins.push(
         new DefinePlugin({
             "process.env.REMOTE_ASSETS": JSON.stringify("/assets/dev")
