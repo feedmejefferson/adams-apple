@@ -18,7 +18,7 @@ export class Food extends Component<Props> {
     public render({ id, detail, onClick }: Props) {
         const a = Attribution({...detail});
         const backgroundStyle = {
-            "background-image": `url(/assets/images/${id}.jpg)`,
+            "background-image": `url(${process.env.REMOTE_ASSETS}/images/${id}.jpg)`,
             "background-position": detail && detail.position ? detail.position : "center"
         }
         /*

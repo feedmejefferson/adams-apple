@@ -1,5 +1,5 @@
 import { Basket, getRandomSeed } from "feedme-trees";
-import coreBasket from '../assets/meta/basket.core.json';
+import coreBasket from '../../remote-assets/meta/basket.core.json';
 import { AppState, Dilemma, Food, UserConsent } from './types';
 
 export function dilemma(aId: string, bId: string): Dilemma {

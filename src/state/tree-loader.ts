@@ -1,14 +1,14 @@
-import { Basket, depth } from "feedme-trees";
 import { Store } from "unistore";
 import { globalState } from ".";
 import { AppState } from "./types";
 
 
-const basketUrl = (basketId: string) => (`/assets/meta/basket.${basketId}.json`)
+const basketUrl = (basketId: string) => (`${process.env.REMOTE_ASSETS}/meta/basket.${basketId}.json`)
 
 const noResponse = Error("no response");
 
 async function updateBasket(branch: number, expansionId: string): Promise<void> {
+    console.log(basketUrl(expansionId))
     await fetch(basketUrl(expansionId))
     .then(res => res.json())
     .then(json => { 
