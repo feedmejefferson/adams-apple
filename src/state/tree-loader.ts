@@ -13,10 +13,16 @@ async function updateBasket(branch: number, expansionId: string): Promise<void> 
     .then(json => { 
         const { basket } = globalState.getState();
         globalState.setState({basket: basket.withExpansion(json)});
+        // precache the images for the basket
+        Object.keys(json.attributions)
+          .map(key => `${process.env.REMOTE_ASSETS}/images/${key}.jpg`)
+          .forEach(img => fetch(img)
+            .catch(err => { console.log(`couldn't load ${img}: ${err}`); }));
     }).catch(err => {if(err===noResponse) {
 //        console.log("empty respose, ignoring");
     }else{
-        throw Error("problems loading partial");
+        console.log(basketUrl(expansionId),err);
+        throw Error(`problems loading partial: ${err}`);
     }})
 }
 // asyncronously load and expand requested branches in the background

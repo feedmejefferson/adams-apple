@@ -11,7 +11,7 @@
     "serve:all": "npm-run-all -p -r serve:site serve:assets",
     "serve:site": "http-server build",
     "serve:assets": "http-server -p 8081 --cors remote-assets",
-    "dev": "preact watch",
+    "dev": "preact watch --sw false",
     "lint": "tslint --project .",
     "test": "jest ./tests",
     "test:watch": "jest ./tests --watch",
@@ -57,7 +57,8 @@
     "tslint-eslint-rules": "^5.4.0",
     "tslint-react": "^3.6.0",
     "typescript": "^3.2.1",
-    "typings-for-css-modules-loader": "^1.7.0"
+    "typings-for-css-modules-loader": "^1.7.0",
+    "workbox-webpack-plugin": "^4.3.1"
   },
   "dependencies": {
     "preact": "^8.5.2",

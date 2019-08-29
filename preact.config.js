@@ -1,6 +1,7 @@
 import { resolve } from "path";
 import { DefinePlugin } from "webpack";
 import CopyWebpackPlugin from "copy-webpack-plugin";
+import WorkboxPlugin from "workbox-webpack-plugin";
 
 export default function(config, env, helpers) {
     // Switch css-loader for typings-for-css-modules-loader, which is a wrapper
@@ -22,21 +23,35 @@ export default function(config, env, helpers) {
         "src",
         "index"
     );
+    const theme = env.theme ? env.theme : "adams-apple";
+    const copyList = [
+        { from: "themes/common" },
+        { from: `themes/${theme}`, force: true }
+    ];
+    if (!env.isProd) {
+        copyList.push({ from: "themes/dev" });
+    }
 
-    config.plugins.push(
-        new CopyWebpackPlugin([
-            { context: `${__dirname}/src/assets`, from: `*.*` }
-        ])
-    );
+    config.plugins.push(new CopyWebpackPlugin(copyList));
 
     // TODO: replace this with some kind of dotenv hook to pull in configuration
     // details from a build config file
     config.plugins.push(
         new DefinePlugin({
-            "process.env.REMOTE_ASSETS": JSON.stringify("/assets/dev")
-            //            "process.env.REMOTE_ASSETS": JSON.stringify("http://localhost:8081")
+            // "process.env.REMOTE_ASSETS": JSON.stringify("/assets")
+            "process.env.REMOTE_ASSETS": JSON.stringify("http://localhost:8081")
+            // "process.env.REMOTE_ASSETS": JSON.stringify("https://adams-apple.firebaseapp.com/assets")
         })
     );
+
+    // config.plugins.push(
+    //     		new WorkboxPlugin.InjectManifest({
+    //         swSrc: './src/sw.js',
+    //         // swDest: './sw.js',
+    //         //include: [/\.html$/, /\.js$/, /\.svg$/, /\.css$/, /\.png$/, /\.ico$/],
+    //         exclude: [/\.map$/, /^manifest.*\.js$/, /dev/],
+    //     })
+    // );
 
     return config;
 }
