@@ -1,7 +1,6 @@
 import { resolve } from "path";
-import { DefinePlugin } from "webpack";
 import CopyWebpackPlugin from "copy-webpack-plugin";
-import WorkboxPlugin from "workbox-webpack-plugin";
+import Dotenv from "dotenv-webpack";
 
 export default function(config, env, helpers) {
     // Switch css-loader for typings-for-css-modules-loader, which is a wrapper
@@ -24,6 +23,7 @@ export default function(config, env, helpers) {
         "index"
     );
     const theme = env.theme ? env.theme : "adams-apple";
+    const lifeCycle = env.isProd ? env.lifeCycle : "dev";
     const copyList = [
         { from: "themes/common" },
         { from: `themes/${theme}`, force: true }
@@ -34,24 +34,15 @@ export default function(config, env, helpers) {
 
     config.plugins.push(new CopyWebpackPlugin(copyList));
 
-    // TODO: replace this with some kind of dotenv hook to pull in configuration
-    // details from a build config file
+    const lifeCycleTheme = lifeCycle ? theme + "." + lifeCycle : theme;
+    // first pull from the main production configuration (as the default)
+    // but then apply any lifecycle specific overrides
     config.plugins.push(
-        new DefinePlugin({
-            // "process.env.REMOTE_ASSETS": JSON.stringify("/assets")
-            "process.env.REMOTE_ASSETS": JSON.stringify("http://localhost:8081")
-            // "process.env.REMOTE_ASSETS": JSON.stringify("https://adams-apple.firebaseapp.com/assets")
+        new Dotenv({
+            path: `src/themes/${lifeCycleTheme}.env`,
+            defaults: `src/themes/${theme}.env`
         })
     );
-
-    // config.plugins.push(
-    //     		new WorkboxPlugin.InjectManifest({
-    //         swSrc: './src/sw.js',
-    //         // swDest: './sw.js',
-    //         //include: [/\.html$/, /\.js$/, /\.svg$/, /\.css$/, /\.png$/, /\.ico$/],
-    //         exclude: [/\.map$/, /^manifest.*\.js$/, /dev/],
-    //     })
-    // );
 
     return config;
 }

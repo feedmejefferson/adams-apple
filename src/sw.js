@@ -7,7 +7,7 @@ workbox.routing.registerRoute(
     "GET"
 );
 workbox.routing.registerRoute(
-    new RegExp("http://localhost:8081/.*"),
+    new RegExp(process.env.REMOTE_REGEX),
     new workbox.strategies.StaleWhileRevalidate(),
     "GET"
 );

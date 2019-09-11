@@ -5,7 +5,7 @@ import { UserConsent } from "../../state/types";
 
 // this seems very ugly. maybe one day I'll understand how to make it better
 let suppress = true;  // defaulting to true for testing
-const GA_TRACKING_ID = 'UA-142228380-1'
+const GA_TRACKING_ID = process.env.GA_TRACKING_ID;
 
 export const pageview = (url: string) => {
     if(suppress){return}
