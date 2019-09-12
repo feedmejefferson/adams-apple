@@ -7,6 +7,11 @@ workbox.routing.registerRoute(
     "GET"
 );
 workbox.routing.registerRoute(
+    new RegExp(process.env.REMOTE_REGEX + ".*\\.jpg"),
+    new workbox.strategies.CacheFirst(),
+    "GET"
+);
+workbox.routing.registerRoute(
     new RegExp(process.env.REMOTE_REGEX),
     new workbox.strategies.StaleWhileRevalidate(),
     "GET"

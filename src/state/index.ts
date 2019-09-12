@@ -18,8 +18,12 @@ export const globalState = createStore<AppState>(newAppState());
 // persist the store 
 const adapter = localStorageAdapter();
 const config = {
-    version: 2,
+    version: 3,
     debounceType: 100,
+    migration: (oldState: any, oldversion: number) => ({
+        ...newAppState(),
+        analytics: oldState.analytics
+    }),
     // @ts-ignore
     map: state => ({
         basket: state.basket.serialize(), 
