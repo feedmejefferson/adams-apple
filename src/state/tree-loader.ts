@@ -16,7 +16,7 @@ async function updateBasket(branch: number, expansionId: string): Promise<void> 
         // precache the images for the basket
         Object.keys(json.attributions)
           .map(key => `${process.env.REMOTE_ASSETS}/images/${key}.jpg`)
-          .forEach(img => fetch(img, { mode: 'no-cors' })
+          .forEach(img => fetch(img, { mode: 'cors' })
             .catch(err => { console.log(`couldn't load ${img}: ${err}`); }));
     }).catch(err => {if(err===noResponse) {
 //        console.log("empty respose, ignoring");

@@ -16,9 +16,9 @@ export const globalState = createStore<AppState>(newAppState());
 
 
 // persist the store 
-const adapter = localStorageAdapter();
+const adapter = localStorageAdapter(); // pass in the name you want to store this under in local storage
 const config = {
-    version: 3,
+    version: 4,
     debounceType: 100,
     migration: (oldState: any, oldversion: number) => ({
         ...newAppState(),

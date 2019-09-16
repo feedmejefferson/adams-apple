@@ -12,8 +12,8 @@ workbox.routing.registerRoute(
     "GET"
 );
 workbox.routing.registerRoute(
-    new RegExp(process.env.REMOTE_REGEX),
-    new workbox.strategies.StaleWhileRevalidate(),
+    new RegExp(process.env.REMOTE_REGEX + ".*\\.basket\\..*\\.json"),
+    new workbox.strategies.NetworkOnly(),
     "GET"
 );
 workbox.routing.registerNavigationRoute(
