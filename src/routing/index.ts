@@ -1,5 +1,6 @@
 import { globalState } from "../state";
 import { randomDilemma } from "../state/constants";
+import { prefetchImages } from "../state/tree-loader";
 import { Side } from "../state/types";
 
 export const routeForBranch = (side: number): string => {
@@ -20,5 +21,7 @@ export const routeForBranch = (side: number): string => {
     } 
 
     const dilemma = randomDilemma(basket, branch);
+//    console.log("how many times are we doing this?", dilemma);
+    prefetchImages([dilemma.a.id, dilemma.b.id]);
     return(`/choice/?branch=${branch}&a=${dilemma.a.id}&b=${dilemma.b.id}`);
 }

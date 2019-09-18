@@ -14,10 +14,14 @@ async function updateBasket(branch: number, expansionId: string): Promise<void> 
         const { basket } = globalState.getState();
         globalState.setState({basket: basket.withExpansion(json)});
         // precache the images for the basket
-        Object.keys(json.attributions)
-          .map(key => `${process.env.REMOTE_ASSETS}/images/${key}.jpg`)
-          .forEach(img => fetch(img, { mode: 'cors' })
-            .catch(err => { console.log(`couldn't load ${img}: ${err}`); }));
+        // Object.keys(json.attributions)
+        //     .map(key => `${process.env.REMOTE_ASSETS}/images/${key}.jpg`)
+        //     .reduce((previousPromise, img) => { 
+        //         return previousPromise
+        //         .then(res => {console.log(res);fetch(img, { mode: 'cors' });})
+        //         .catch(err => { console.log(`couldn't load ${img}: ${err}`); })
+        //         .finally(() => { console.log("in finally");fetch(img, { mode: 'cors' }); })
+        //     }, Promise.resolve());
     }).catch(err => {if(err===noResponse) {
 //        console.log("empty respose, ignoring");
     }else{
@@ -32,4 +36,15 @@ export async function loadBranch(store: Store<AppState>, branch: number) {
         const expansion = store.getState().basket.hasExpansion(branch)
         await updateBasket(branch, expansion);
     }
+}
+
+export async function prefetchImages(foodIds: string[]) {
+    foodIds.map(key => `${process.env.REMOTE_ASSETS}/images/${key}.jpg`)
+    .reduce((previousPromise, img) => { 
+        return previousPromise
+//        .then(res => {fetch(img, { mode: 'cors' });})
+        .catch(err => { console.log(`couldn't load ${img}: ${err}`); })
+        .finally(() => { fetch(img, { mode: 'cors' }); })
+    }, Promise.resolve());
+
 }
