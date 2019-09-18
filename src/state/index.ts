@@ -13,31 +13,54 @@ import { AppState, Side, UserConsent } from "./types";
 
 // export const globalState = unistoreDevTools(createStore<AppState>(newAppState()));
 export const globalState = createStore<AppState>(newAppState());
+// globalState.subscribe((state: AppState) => console.log(new Date().getTime(), state));
 
+// create a promise to defer loading basket/tree until local storage has been
+// deserialized (rehydrated)
+let resolveHydrated: (r: any) => void;
+export const hydrated = new Promise((resolve, reject) => {
+    resolveHydrated = resolve;
+})
 
 // persist the store 
+const version = 1;
 const adapter = localStorageAdapter(); // pass in the name you want to store this under in local storage
 const config = {
-    version: 4,
+    version,
     debounceType: 100,
-    migration: (oldState: any, oldversion: number) => ({
-        ...newAppState(),
-        analytics: oldState.analytics
-    }),
+    migration: (oldState: any, oldversion: number) => {
+        // console.log("um, migrating?", oldversion, oldState && oldState.version, oldState); 
+        const rv =  {
+            ...newAppState(),
+            analytics: oldState && oldState.analytics
+        };
+        resolveHydrated("mostly migrated"); 
+        return rv;
+    },
     // @ts-ignore
-    map: state => ({
-        basket: state.basket.serialize(), 
-        choices: state.choices, 
-        recommendations: state.recommendations,
-        analytics: state.analytics
-    }),
+    map: state => {
+        // failsafe to make sure promise is eventually resolved even if
+        // we hit error during hydration or migration
+        resolveHydrated("mapped"); 
+        return {
+            version,
+            basket: state.basket.serialize(), 
+            choices: state.choices, 
+            recommendations: state.recommendations,
+            analytics: state.analytics
+        }
+    },
     // @ts-ignore
-    hydration: state => ({
-        basket: Basket.deserialize(state.basket), 
-        choices: state.choices, 
-        recommendations: state.recommendations,
-        analytics: state.analytics ? state.analytics : UserConsent.Unknown
-    })
+    hydration: state => {
+        const rv = {
+            basket: Basket.deserialize(state.basket), 
+            choices: state.choices, 
+            recommendations: state.recommendations,
+            analytics: state.analytics ? state.analytics : UserConsent.Unknown
+        }
+        resolveHydrated("mostly hydrated");
+        return rv;
+    }
 }
 persistStore(globalState, adapter, config);
 
@@ -127,7 +150,7 @@ export const actions = (store: Store<AppState>) => ({
     },
 
     expandBranch({ branch }: AppState) {
-        loadBranch(store, branch);
+        hydrated.then(() => loadBranch(store, branch))
     },
 
 });

@@ -21,6 +21,7 @@ export interface Choice {
     notChosen: Food
 }
 export interface AppState {
+    version?: number,
     basket: Basket,
     branch: number,
     dilemma: Dilemma,

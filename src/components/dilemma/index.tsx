@@ -3,7 +3,7 @@ import { Component, h } from "preact";
 import { route } from "preact-router";
 import { connect } from "unistore/preact";
 import { routeForBranch } from "../../routing";
-import { actions, globalState } from "../../state"
+import { actions, globalState, hydrated } from "../../state"
 import { dilemma as newDilemma } from "../../state/constants";
 import { loadBranch } from "../../state/tree-loader";
 import { Side } from "../../state/types";
@@ -40,7 +40,7 @@ export const DilemmaRoute = ({ branch, a, b }: Props) => {
         branch,
         dilemma: newDilemma(a ? a : state.dilemma.a.id, b ? b : state.dilemma.b.id)
     });
-    loadBranch(globalState, branch);
+    hydrated.then(() => loadBranch(globalState, branch));
     return <Dilemma />
 }
 
