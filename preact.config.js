@@ -23,6 +23,8 @@ export default function(config, env, helpers) {
         "index"
     );
     const theme = env.theme ? env.theme : "adams-apple";
+    config.resolve.alias["theme"] = env.source(`themes/${theme}`);
+
     const lifeCycle = env.isProd ? env.lifeCycle : "dev";
     const copyList = [
         { from: "themes/common" },
