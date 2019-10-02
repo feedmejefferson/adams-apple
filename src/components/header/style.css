@@ -1,4 +1,4 @@
-.header {
+header {
     position: fixed;
     left: 0;
     top: 0;
@@ -9,7 +9,7 @@
     z-index: 50;
 }
 
-.header h1 {
+header h1 {
     float: left;
     margin: 0;
     padding: 0 15px;
@@ -19,9 +19,34 @@
     color: #fff;
 }
 
-.header h1 a {
+header h1 a {
     color: #fff;
     text-decoration: none;
+}
+header img {
+    position: relative;
+    top: 6px;
+    height: 44px;
+}
+@media (min-width: 721px) {
+    .small-screen {
+        display: none;
+    }
+    .large-screen {
+        display: inline-block;
+    }
+}
+
+@media (max-width: 720px) {
+    .small-screen {
+        display: inline-block;
+    }
+    .large-screen {
+        display: none;
+    }
+    header {
+        background: rgba(0, 0, 0, 0);
+    }
 }
 
 .header nav {
