@@ -24,7 +24,7 @@ export const hydrated = new Promise((resolve, reject) => {
 })
 
 // persist the store 
-const version = 1;
+const version = 2;
 const adapter = localStorageAdapter(); // pass in the name you want to store this under in local storage
 const config = {
     version,
