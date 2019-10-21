@@ -6,6 +6,7 @@ import persistStore from "unissist";
 import localStorageAdapter from "unissist/integrations/localStorageAdapter"
 import createStore, {Store} from "unistore";
 import { event, pageview } from "../components/tracker"
+import { Appetite } from "./appetite";
 // import unistoreDevTools from "unistore/devtools";
 import { food, newAppState, randomDilemma } from "./constants";
 import { loadBranch } from "./tree-loader";
@@ -107,14 +108,18 @@ export const actions = (store: Store<AppState>) => ({
     },
 
     accept({analytics, recommendations}: AppState) {
+        const recommended = recommendations[recommendations.length-1].id
+        new Appetite().recommendationAccepted(recommended, true)
         const likes = recommendations.map(f=>f.id).join("~");
         const path = `/feedme?likes=${likes}`;
-        event('accept', `/food/${recommendations[recommendations.length-1].id}`);
+        event('accept', `/food/${recommended}`);
         route(path);
     },
     
     reject({analytics, recommendations}: AppState) {
-        event('reject', `/food/${recommendations[recommendations.length-1].id}`);
+        const recommended = recommendations[recommendations.length-1].id
+        new Appetite().recommendationAccepted(recommended, false)
+        event('reject', `/food/${recommended}`);
         const newRecs= [...recommendations];
         newRecs.pop();
         const likes = newRecs.map(f => f.id).join("~");
