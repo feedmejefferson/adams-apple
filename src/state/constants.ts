@@ -1,4 +1,4 @@
-import { Basket, getRandomSeed } from "feedme-trees";
+import { Basket, getRandomSeed } from "@feedmejefferson/feedme-trees";
 import coreBasket from 'theme/assets/meta/basket.core.json';
 import { AppState, Dilemma, Food, UserConsent } from './types';
 

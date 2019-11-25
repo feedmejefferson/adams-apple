@@ -1,4 +1,4 @@
-import { Basket } from "feedme-trees";
+import { Basket } from "@feedmejefferson/feedme-trees";
 import { route } from "preact-router";
 // @ts-ignore
 import persistStore from "unissist";
