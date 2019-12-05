@@ -5,6 +5,7 @@ import persistStore from "unissist";
 // @ts-ignore
 import localStorageAdapter from "unissist/integrations/localStorageAdapter"
 import createStore, {Store} from "unistore";
+import { actions as chefActions } from "../components/chef-says";
 import { event, pageview } from "../components/tracker"
 import { Appetite } from "./appetite";
 // import unistoreDevTools from "unistore/devtools";
@@ -104,7 +105,11 @@ export const actions = (store: Store<AppState>) => ({
     },
 
     chooseB(state: AppState) {
-        return chooseSide(state, Side.B);
+//        return chooseSide(state, Side.B); 
+//      TODO: go back to what it was -- this is just a hack for making chef dance
+        const partial = chefActions.say(state,"I love Broccoli");
+        console.log(partial)
+        return { ...chooseSide(state, Side.B), ...partial}
     },
 
     accept({analytics, recommendations}: AppState) {

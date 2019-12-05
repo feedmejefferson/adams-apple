@@ -1,5 +1,5 @@
-import { Basket } from "feedme-trees";
-import { Attribution } from "feedme-trees/dist/types";
+import { Basket } from "@feedmejefferson/feedme-trees";
+import { Attribution } from "@feedmejefferson/feedme-trees/dist/types";
 
 export enum Side { 
     A = 0,
@@ -12,6 +12,14 @@ export enum UserConsent {
     AnalyticsAllowed = 2
 }
 
+export enum ChefPhase {
+    Offscreen = 0,
+    Entering = 1,
+    Onscreen = 2,
+    Talking = 3,
+    Exiting = 4,
+}
+
 export interface Dilemma {
     a: Food,
     b: Food
@@ -20,6 +28,12 @@ export interface Choice {
     chosen: Food,
     notChosen: Food
 }
+export interface Chef {
+    phase: ChefPhase,
+    saying: any,
+    onDismiss?: (state: AppState) => Partial<AppState>,
+    onNext?: (state: AppState) => Partial<AppState> 
+}
 export interface AppState {
     version?: number,
     basket: Basket,
@@ -27,7 +41,8 @@ export interface AppState {
     dilemma: Dilemma,
     recommendations: Food[], 
     choices: Choice[],
-    analytics: UserConsent
+    analytics: UserConsent,
+    chef?: Chef
 }
 
 export interface Food  {

@@ -1,0 +1,34 @@
+.consent {
+    width: calc(50% + 4rem);
+    height: calc(50% + 4rem);
+    background: rgba(0, 0, 0, 0.9);
+    color: #ddd;
+    box-sizing: border-box;
+    text-align: left;
+    position: absolute;
+    top: calc(25% - 2rem);
+    left: calc(25% - 2rem);
+    padding: 2rem;
+    z-index: 100;
+}
+
+.consent button {
+    color: #ddd;
+    position: absolute;
+    bottom: 2rem;
+    height: 3rem;
+    width: 30%;
+    font-size: 1rem;
+    border: none;
+}
+
+.accept {
+    right: 2rem;
+    font-weight: bold;
+    background: blue;
+}
+.decline {
+    left: 2rem;
+    background: none;
+    border: none;
+}
