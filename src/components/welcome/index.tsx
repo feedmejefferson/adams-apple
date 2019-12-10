@@ -12,7 +12,6 @@ type Props = Partial<AppState> & OwnProps & ChefActionProps;
 interface State {}
 
 const welcomeMessage = <div>
-        <h2>Welcome!</h2>
         <p>
             Hi, I'm Chef Jefferson and welcome to Feed Me, Jefferson!
             Feel free to take the quick tutorial, or skip it if you know 
@@ -27,7 +26,6 @@ const welcomeMessage = <div>
     </div>
 
 const consent = <div>
-        <h2>Cookies</h2>
         <p>
             No problem, but before I go, I just wanted to say
             that we use cookies and Google Analytics 
@@ -37,8 +35,8 @@ const consent = <div>
         <button class={style.decline}>Please don't</button>
     </div>
 
-export const Welcome = connect('analytics', chefActions )(({ analytics, say }: any) => {
-    if(analytics !== UserConsent.Unknown) { return null }
+export const Welcome = connect('analytics, ready', chefActions )(({ analytics, ready, say }: any) => {
+    if(!ready || analytics !== UserConsent.Unknown) { console.log("not ready");return null }
     const undissmissible = () => {say(consent,undissmissible,()=>{route("/intro/1")})}
     say(welcomeMessage,undissmissible,()=>{route("/intro/1")})
     return null

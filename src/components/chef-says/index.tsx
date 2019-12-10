@@ -2,6 +2,7 @@ import { Component, h } from "preact";
 import { route } from "preact-router";
 import { connect } from "unistore/preact";
 import { AppState, Chef, ChefPhase } from "../../state/types";
+import { Content } from "./content";
 import * as style from "./style.css";
 
 
@@ -42,7 +43,7 @@ export interface ActionProps {
   talk: () => Partial<AppState>,
   stopTalking: () => Partial<AppState>,
   next: () => Partial<AppState>,
-  say: (message: string, onDismiss?: (state: AppState) => Partial<AppState>, onNext?: (state: AppState) => Partial<AppState>) => Partial<AppState>
+  say: (message: any, onDismiss?: (state: AppState) => Partial<AppState>, onNext?: (state: AppState) => Partial<AppState>) => Partial<AppState>
 }
 
 interface OwnProps { }
@@ -53,9 +54,11 @@ export const ChefSays = connect(['chef'], actions )(({chef, dismiss, talk, stopT
 // export const ChefSays = ({ chef }: Props, {}: State) => {
 //  if(!chef || chef.phase === ChefPhase.Offscreen) { return <div/>}
 // if(!chef) {return <div/>}
+  const cls = `${style.chefBox} ${(!chef || chef.phase === ChefPhase.Offscreen) ? style.offscreen : style.onscreen}`
+  console.log(cls)
     return (
         <div 
-          class={`${style.chefBox} ${(!chef || chef.phase === ChefPhase.Offscreen) ? style.offscreen : style.onscreen}`} 
+          class={cls} 
           onTransitionEnd={e=>{e.stopPropagation();if(chef.phase===ChefPhase.Onscreen){talk()}}}>
         <div 
           class={`${style.chefSprite} ${chef && chef.phase === ChefPhase.Talking && style.talking}`}
@@ -63,7 +66,7 @@ export const ChefSays = connect(['chef'], actions )(({chef, dismiss, talk, stopT
         <div class={style.instructions}>
           <div class={style.speechBubble}>
             <div class={style.content} onClick={next}>
-              { chef && chef.saying }
+              {chef && <Content>{chef.saying}</Content>}
           </div>
         </div>
         </div>

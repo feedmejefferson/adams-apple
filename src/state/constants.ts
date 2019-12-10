@@ -15,7 +15,7 @@ export function newAppState(): AppState {
     // bootstrap initial 8 images for now
     const basket = new Basket(coreBasket);
     const firstDilemma = randomDilemma(basket, 1);
-    return {basket, branch: 1, dilemma: firstDilemma, recommendations: [], choices:[], analytics: UserConsent.Unknown }
+    return {basket, branch: 1, dilemma: firstDilemma, recommendations: [], choices:[], analytics: UserConsent.Unknown, ready: false }
 } 
 
 export const EMPTY_FOOD = {

@@ -43,6 +43,7 @@ export interface AppState {
     choices: Choice[],
     analytics: UserConsent,
     chef?: Chef
+    ready: boolean
 }
 
 export interface Food  {

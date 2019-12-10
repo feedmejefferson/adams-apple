@@ -1,4 +1,3 @@
-import { Basket } from "feedme-trees";
 import { Component, h } from "preact";
 import { route } from "preact-router";
 import { connect } from "unistore/preact";

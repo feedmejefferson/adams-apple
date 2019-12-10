@@ -34,6 +34,7 @@ const config = {
         // console.log("um, migrating?", oldversion, oldState && oldState.version, oldState); 
         const rv =  {
             ...newAppState(),
+            ready: true,
             analytics: oldState && oldState.analytics
         };
         resolveHydrated("mostly migrated"); 
@@ -49,7 +50,8 @@ const config = {
             basket: state.basket.serialize(), 
             choices: state.choices, 
             recommendations: state.recommendations,
-            analytics: state.analytics
+            analytics: state.analytics,
+            ready: true
         }
     },
     // @ts-ignore
@@ -58,7 +60,8 @@ const config = {
             basket: Basket.deserialize(state.basket), 
             choices: state.choices, 
             recommendations: state.recommendations,
-            analytics: state.analytics ? state.analytics : UserConsent.Unknown
+            analytics: state.analytics ? state.analytics : UserConsent.Unknown,
+            ready: true
         }
         resolveHydrated("mostly hydrated");
         return rv;
@@ -105,11 +108,11 @@ export const actions = (store: Store<AppState>) => ({
     },
 
     chooseB(state: AppState) {
-//        return chooseSide(state, Side.B); 
+        return chooseSide(state, Side.B); 
 //      TODO: go back to what it was -- this is just a hack for making chef dance
-        const partial = chefActions.say(state,"I love Broccoli");
-        console.log(partial)
-        return { ...chooseSide(state, Side.B), ...partial}
+        // const partial = chefActions.say(state,"I love Broccoli");
+        // console.log(partial)
+        // return { ...chooseSide(state, Side.B), ...partial}
     },
 
     accept({analytics, recommendations}: AppState) {
