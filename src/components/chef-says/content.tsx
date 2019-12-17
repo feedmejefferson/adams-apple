@@ -1,81 +1,85 @@
 import { Component, h } from "preact";
-import { route } from "preact-router";
-import { connect } from "unistore/preact";
-import { AppState, Chef, ChefPhase } from "../../state/types";
+import { CaptionFragment, EMPTY_FRAGMENT, slice } from "./parse"
 import * as style from "./style.css";
 
+enum Phase {
+  Talking = 0,
+  More = 1,
+  Complete = 2
+}
 
 interface Props { 
-  children: any
+  children: any,
+  onPause: () => void;
+  onResume: () => void;
+  onComplete: () => void;
 }
 interface State {
-  original: any,
-  count: number
+  fragment: CaptionFragment,
+  phase: Phase
 }
 
-const firstNWords = (children: any, n: number): {content: any, length: number} => {
-  if(Array.isArray(children)) {
-    let i=0;
-    let l=0;
-    const value = [];
-    while(i<children.length && l<n){
-      const content = firstNWords(children[i],n-l)
-      value.push(content.content)
-      l+=content.length;
-      i++;
-    }
-    return {content: value, length: l}
-  }
-  if (typeof children === 'string') {
-    const s = children.split(' ');
-    return s.length < n ? { content: children, length: s.length } : { content: s.slice(0,n).join(' '), length: n }
-  }
-  if (typeof children === 'object') {
-    const c = firstNWords(children.children, n)
-    return { content: {...children, children: c.content}, length: c.length}
-  }
-  console.log(typeof children, children )
-  return {content: children, length: n }
-}
-
-const firstN = (children: any, n: number): {content: any, length: number} => {
-  if(Array.isArray(children)) {
-    let i=0;
-    let l=0;
-    const value = [];
-    while(i<children.length && l<n){
-      const content = firstN(children[i],n-l)
-      value.push(content.content)
-      l+=content.length;
-      i++;
-    }
-    return {content: value, length: l}
-  }
-  if (typeof children === 'string') {
-    return children.length < n ? { content: children, length: children.length } : { content: children.substr(0,n), length: n }
-  }
-  if (typeof children === 'object') {
-    const c = firstN(children.children, n)
-    return { content: {...children, children: c.content}, length: c.length}
-  }
-  console.log(typeof children, children )
-  return {content: children, length: n }
-}
-
-
-export class Content extends Component<Props> {
+export class Content extends Component<Props, State> {
   public content: any;
-  public render({ children }: Props, {count, original}: State) {
-    const { content, length } = firstN(children, count)
-      if(!count || count < length+1) { 
-        setTimeout(()=>this.setState({count:length+1}),25)
+  public delay = 40; // extra millisecond delay per word character
+  public componentWillReceiveProps(nextProps: Props){
+    if(nextProps.children!==this.props.children && JSON.stringify(nextProps.children)!==JSON.stringify(this.props.children)){
+      this.setState({fragment: EMPTY_FRAGMENT});
+    }
+  }
+  public shouldComponentUpdate(props: Props, {phase, fragment}: State) {
+    if(!fragment || !this.state.fragment) { return true }
+    return (phase !== this.state.phase || fragment.end > this.state.fragment.end);
+  }
+
+  public render({ children, onPause }: Props, {fragment, phase}: State) {
+    console.log("content phase", phase)
+    if(!fragment) {
+      this.setState({fragment: EMPTY_FRAGMENT})
+      return <div class={style.caption} ref={c=> this.content=c}/>
+    }
+    const handleClick = () => {
+      if(phase===Phase.More) { 
+        this.props.onResume();
+        this.setState({fragment: slice(children, fragment.end, fragment.end), phase: Phase.Talking});
+      } else if (phase===Phase.Complete) { 
+        console.log("complete damnit!")
+        this.props.onComplete();
+      } else { 
+        // chef is still talking, user is impatient -- speed things up
+        this.delay = 1 
       }
-      console.log(count)
-      return (
-        <div ref={c=> this.content=c}>{content}</div>
-      );
+    }
+    return (
+      <div class={style.caption} ref={c=> this.content=c} onClick={handleClick}>
+        <p>
+        {fragment.content}
+        {phase===Phase.More && " ..."}
+        </p>
+      </div>
+    );
   }
-  public componentDidUpdate(){
-//    console.log(this.content.offsetHeight)
+  public componentDidUpdate(props: Props, state: State){
+    if(!this.content.firstChild) { return }
+    const containerHeight = this.content.offsetHeight;
+    const textHeight = this.content.firstChild.offsetHeight
+    const lineHeight = parseInt(getComputedStyle(this.content.firstChild).getPropertyValue('line-height')) || 0;
+    if(containerHeight - textHeight > lineHeight) { 
+      const fragment = this.state.fragment;
+      const nextFragment = slice(props.children,fragment.start, fragment.end+1)
+        if(nextFragment.end===fragment.end) {
+          this.setState({phase: Phase.Complete});
+          this.props.onPause();
+//        setTimeout(()=>{this.props.onPause()},500);
+        return;
+  
+      }      
+      setTimeout(()=>{this.setState({fragment: nextFragment})},this.delay*fragment.last.length) 
+      return;
+    }
+    this.setState({phase: Phase.More});
+    this.props.onPause();
+//    setTimeout(()=>{this.props.onPause()},500);
   }
+  
 }

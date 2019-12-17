@@ -14,23 +14,12 @@ interface OwnProps {
 }
 type Props = Partial<AppState> & OwnProps & ActionProps;
 interface State {}
-const step1 = <div>
-        <h2>Phase 1: Food Dillemas</h2>
-        <p>
-            Just keep picking whichever food you'd rather eat right now.
-        </p>
-        <a href="/intro/2">Next...</a>
-    </div>
+const step1 = <p>Just keep picking whichever food you'd rather eat right now.</p>
 
-const step2 = <div>
-        <h2>Phase 2: The Recommendation</h2>
-        <p>
-            Let us know how we're doing by thumbing down any recommendations you don't want until you see one that you do.
-        </p>
-        <a href="/">Let's get started!</a>
-    </div>
+const step2 = <p>Let us know how we're doing by thumbing down any recommendations you don't want until you see one that you do.</p>
 
-export const Intro = connect([], chefActions )(({step, say }: any) => {
+export const Intro = connect(['ready'], chefActions )(({ready, step, say }: any) => {
+    if(!ready) {return null}
     const say1 = () => say(step1,()=>{say1()},()=>{route('/intro/2')});
     const say2 = () => say(step2,()=>{say2()},()=>{route('/')});
     switch(step) {

@@ -1,18 +1,40 @@
+.onscreen,
+.transitioning {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100vw;
+    background-color: #33333333;
+    z-index: 51;
+}
+.caption {
+    height: 100%;
+    border: 1px solid red;
+    width: 100;
+    margin: 0;
+    padding: 0;
+    text-align: left;
+}
+.caption * {
+    margin: 0;
+    line-height: 1.25;
+    display: inline;
+}
 /* orientation dependent settings */
-.instructions {
+.speech-bubble {
     position: absolute;
     left: 100%;
-    top: 30%;
-    color: #fff;
+    top: 50%;
+    width: 50vmin;
+    height: 30vmin;
+}
+.transitioning .speech-bubble {
     opacity: 0;
-    width: 50vw;
 }
-.onscreen .instructions {
+.onscreen .speech-bubble {
     opacity: 1;
-    transition: opacity 0s 0.6s;
-}
-.instructions a {
-    color: #fff;
+    /*    transition: opacity 0s 0.6s;*/
 }
 /* override values for landscape
   @media (min-aspect-ratio: 1/1) {
@@ -29,8 +51,15 @@
     background-position: 0% 0%;
 }
 .talking {
-    animation: talk 2.5s steps(1) 0.2s 1;
+    animation: talk 0.3s steps(1) 0.2s infinite;
 }
+.exiting {
+    animation: exit 0.6s;
+}
+.entering {
+    animation: enter 0.6s;
+}
+
 .chef-box {
     height: 0px;
     width: 35vmin;
@@ -39,55 +68,150 @@
     top: 10%;
     /*  left: -10vmin;*/
 }
+/*
 .offscreen {
     left: -300vmin;
     transition: left 400ms ease-in;
 }
 .onscreen {
     left: -10vmin;
-    /* bounce */
+    /* bounce 
     transition: left 500ms cubic-bezier(0.47, 1.64, 0.41, 0.8);
 }
+*/
+
 @keyframes talk {
     from,
-    10%,
-    20%,
-    30%,
-    40%,
-    50%,
-    60% {
+    100% {
         background-position: 0% 0%;
     }
-    7%,
-    16%,
-    25%,
-    36%,
-    45%,
-    56% {
+    50% {
         background-position: -100% 0%;
     }
 }
 
-.speech-bubble {
-    position: relative;
-    background: #4f2f4fdd;
-    border-radius: 0.4em;
+.instructions,
+.instructions a {
+    color: black;
 }
-.speech-bubble .content {
-    padding: 0.5em;
+.speech-bubble {
+    padding: 1em;
+    margin-left: 2em;
+    border: 2px solid black;
+    text-align: center;
+    color: #333;
+    background: #fff;
+    /* css3 */
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    border-radius: 20px;
 }
 
+/* larger curve 
+.speech-bubble:before {
+    content:"";
+    position:absolute;
+    z-index:10;
+    left:-30px;
+    top:50px;
+    width:28px;
+    height:20px;
+    border-style:solid;
+    border-width:0 0 2px 2px;
+    border-color: black;
+    background:transparent;
+    border-bottom-left-radius:30px 20px;
+}
+/* smaller curve 
+.speech-bubble:after {
+    content:"";
+    position:absolute;
+    z-index:10;
+    left:-30px;
+    top:50px;
+    width:28px;
+    height:10px;
+    border-style:solid;
+    border-width: 0 0 2px 2px;
+    border-color:black;
+    background:transparent;
+    border-bottom-left-radius:30px 15px;
+}  
+/* white rectangle to cover part of main border
+.speech-bubble > :first-child:after {
+    content:"";
+    position:absolute;
+    left:-2px;
+    top:62px;
+    width:5px;
+    height:8px;
+    background:#fff;
+}
+*/
+
+.speech-bubble:before {
+    content: "";
+    position: absolute;
+    left: -40px;
+    top: 50px;
+    width: 0;
+    height: 0;
+    border-top: 12px solid black;
+    border-left: 40px solid transparent;
+    transform: skewY(20deg);
+}
 .speech-bubble:after {
     content: "";
     position: absolute;
-    left: 0;
-    top: 10vmin;
+    left: -24px;
+    top: 56px;
     width: 0;
     height: 0;
-    border: 20px solid transparent;
-    border-right-color: #4f2f4fdd;
-    border-left: 0;
-    border-bottom: 0;
-    margin-top: -9px;
-    margin-left: -18px;
+    border-top: 10px solid white;
+    border-left: 30px solid transparent;
+    transform: skewY(20deg);
+}
+
+@keyframes enter {
+    from,
+    60%,
+    75%,
+    90%,
+    to {
+        animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
+
+    0% {
+        opacity: 0;
+        transform: translate3d(-3000px, 0, 0);
+    }
+
+    60% {
+        opacity: 1;
+        transform: translate3d(25px, 0, 0);
+    }
+
+    75% {
+        transform: translate3d(-10px, 0, 0);
+    }
+
+    90% {
+        transform: translate3d(5px, 0, 0);
+    }
+
+    to {
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes exit {
+    20% {
+        opacity: 1;
+        transform: translate3d(20px, 0, 0);
+    }
+
+    to {
+        opacity: 0;
+        transform: translate3d(-2000px, 0, 0);
+    }
 }

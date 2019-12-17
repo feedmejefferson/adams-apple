@@ -9,7 +9,7 @@ import { actions as chefActions } from "../components/chef-says";
 import { event, pageview } from "../components/tracker"
 import { Appetite } from "./appetite";
 // import unistoreDevTools from "unistore/devtools";
-import { food, newAppState, randomDilemma } from "./constants";
+import { food, initialChef, newAppState, randomDilemma } from "./constants";
 import { loadBranch } from "./tree-loader";
 import { AppState, Side, UserConsent } from "./types";
 
@@ -51,6 +51,7 @@ const config = {
             choices: state.choices, 
             recommendations: state.recommendations,
             analytics: state.analytics,
+            chef: initialChef,
             ready: true
         }
     },
@@ -61,6 +62,7 @@ const config = {
             choices: state.choices, 
             recommendations: state.recommendations,
             analytics: state.analytics ? state.analytics : UserConsent.Unknown,
+            chef: initialChef,
             ready: true
         }
         resolveHydrated("mostly hydrated");

@@ -14,10 +14,12 @@ export enum UserConsent {
 
 export enum ChefPhase {
     Offscreen = 0,
-    Entering = 1,
-    Onscreen = 2,
-    Talking = 3,
-    Exiting = 4,
+    Transitioning = 1,
+    Exiting = 2,
+    Entering = 3,
+    Onscreen = 4,
+    Talking = 5,
+    Waiting = 6
 }
 
 export interface Dilemma {

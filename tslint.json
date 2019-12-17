@@ -47,7 +47,6 @@
         "no-var-before-return": {
             "severity": "warning",
             "options": "allow-destructuring"
-        },
-        "prefer-const-enum": { "severity": "warning" }
+        }
     }
 }
