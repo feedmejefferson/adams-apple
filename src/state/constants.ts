@@ -1,6 +1,7 @@
 import { Basket, getRandomSeed } from "@feedmejefferson/feedme-trees";
 import coreBasket from 'theme/assets/meta/basket.core.json';
-import { AppState, Chef, ChefPhase, Dilemma, Food, UserConsent } from './types';
+import { Chef, ChefPhase } from '../components/chef-says/types';
+import { AppState, Dilemma, Food, UserConsent } from './types';
 
 export function dilemma(aId: string, bId: string): Dilemma {
     return {a:food(aId), b:food(bId)}
@@ -11,7 +12,7 @@ export function randomDilemma(basket: Basket, branch: number): Dilemma {
     const bBranch = aBranch + 1;
     return dilemma(basket.relativeAt(aBranch, seed), basket.relativeAt(bBranch, seed))
 }
-export const initialChef: Chef = { phase: ChefPhase.Offscreen, saying: "" }
+export const initialChef: Chef = { phase: ChefPhase.Offscreen }
 export function newAppState(): AppState {
     // bootstrap initial 8 images for now
     const basket = new Basket(coreBasket);

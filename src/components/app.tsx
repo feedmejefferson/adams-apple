@@ -47,7 +47,7 @@ export default class App extends Component {
                         <Route path="/say/:message?" component={SaySomething} />
                     </Router>
                     <ChefSays />
-                    {/*<Welcome />*/}
+                    <Welcome />
                 </div>
             </Provider>
         );

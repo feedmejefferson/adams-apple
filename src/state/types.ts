@@ -1,5 +1,6 @@
 import { Basket } from "@feedmejefferson/feedme-trees";
 import { Attribution } from "@feedmejefferson/feedme-trees/dist/types";
+import { Chef } from "../components/chef-says/types";
 
 export enum Side { 
     A = 0,
@@ -12,16 +13,6 @@ export enum UserConsent {
     AnalyticsAllowed = 2
 }
 
-export enum ChefPhase {
-    Offscreen = 0,
-    Transitioning = 1,
-    Exiting = 2,
-    Entering = 3,
-    Onscreen = 4,
-    Talking = 5,
-    Waiting = 6
-}
-
 export interface Dilemma {
     a: Food,
     b: Food
@@ -29,12 +20,6 @@ export interface Dilemma {
 export interface Choice {
     chosen: Food,
     notChosen: Food
-}
-export interface Chef {
-    phase: ChefPhase,
-    saying: any,
-    onDismiss?: (state: AppState) => Partial<AppState>,
-    onNext?: (state: AppState) => Partial<AppState> 
 }
 export interface AppState {
     version?: number,

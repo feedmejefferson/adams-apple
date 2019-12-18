@@ -2,11 +2,33 @@ import { Component, h } from "preact";
 import { route } from "preact-router";
 import { AppState } from "src/state/types";
 import { connect } from "unistore/preact";
-import { actions as chefActions } from "../../components/chef-says"
+import { ActionProps, actions as chefActions } from "../../components/chef-says"
+import { Caption } from "../chef-says/types";
 import * as style from "./style.css";
 
-interface ActionProps {
-  say: (message: string) => Partial<AppState>
+
+const done: Caption = {
+    text: <p>Good luck!</p>,
+    background: "/"
+}
+const step2: Caption = {
+    text: <p>
+        Let us know how we're doing by thumbing down any recommendations you 
+        don't want until you see one that you do.
+    </p>,
+    next: done,
+    undismissible: true,
+    background: "/intro/2"
+}
+const step1: Caption = {
+    text: <p>Just keep picking whichever food you'd rather eat right now.</p>,
+    next: step2,
+    undismissible: true,
+    background: "/intro/1"
+}
+
+const actions = {
+  say: chefActions.say
 }
   
 interface OwnProps { 
@@ -14,17 +36,11 @@ interface OwnProps {
 }
 type Props = Partial<AppState> & OwnProps & ActionProps;
 interface State {}
-const step1 = <p>Just keep picking whichever food you'd rather eat right now.</p>
 
-const step2 = <p>Let us know how we're doing by thumbing down any recommendations you don't want until you see one that you do.</p>
-
-export const Intro = connect(['ready'], chefActions )(({ready, step, say }: any) => {
+export const Intro = connect(['ready'], actions )(({ready, step, say }: any) => {
     if(!ready) {return null}
-    const say1 = () => say(step1,()=>{say1()},()=>{route('/intro/2')});
-    const say2 = () => say(step2,()=>{say2()},()=>{route('/')});
     switch(step) {
         case "2":
-            say2()
             return (
                 <div class={style.screen}>
                     <div class={style.recommended}/>
@@ -39,7 +55,6 @@ export const Intro = connect(['ready'], chefActions )(({ready, step, say }: any)
             );
 
         case "1": 
-            say1();
             return (
                 <div class={style.screen}>
                 <div class={style.halfScreen}>
@@ -55,6 +70,7 @@ export const Intro = connect(['ready'], chefActions )(({ready, step, say }: any)
             );
 
         default: 
-        return <div/>
+            say(step1);
+            return null;
     }
 })

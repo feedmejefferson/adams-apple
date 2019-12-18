@@ -24,26 +24,25 @@ export class Content extends Component<Props, State> {
   public delay = 40; // extra millisecond delay per word character
   public componentWillReceiveProps(nextProps: Props){
     if(nextProps.children!==this.props.children && JSON.stringify(nextProps.children)!==JSON.stringify(this.props.children)){
-      this.setState({fragment: EMPTY_FRAGMENT});
+      this.setState({fragment: EMPTY_FRAGMENT, phase: Phase.Talking});
     }
   }
   public shouldComponentUpdate(props: Props, {phase, fragment}: State) {
-    if(!fragment || !this.state.fragment) { return true }
+    if(!fragment || !this.state.fragment ) { return true }
     return (phase !== this.state.phase || fragment.end > this.state.fragment.end);
   }
 
-  public render({ children, onPause }: Props, {fragment, phase}: State) {
-    console.log("content phase", phase)
+  public render({ children }: Props, {fragment, phase}: State) {
     if(!fragment) {
       this.setState({fragment: EMPTY_FRAGMENT})
       return <div class={style.caption} ref={c=> this.content=c}/>
     }
-    const handleClick = () => {
+    const handleClick = (e: any) => {
+      if(e) { e.stopPropagation() } 
       if(phase===Phase.More) { 
         this.props.onResume();
         this.setState({fragment: slice(children, fragment.end, fragment.end), phase: Phase.Talking});
       } else if (phase===Phase.Complete) { 
-        console.log("complete damnit!")
         this.props.onComplete();
       } else { 
         // chef is still talking, user is impatient -- speed things up
@@ -59,14 +58,14 @@ export class Content extends Component<Props, State> {
       </div>
     );
   }
-  public componentDidUpdate(props: Props, state: State){
+  public componentDidUpdate(prevProps: Props, prevState: State){
     if(!this.content.firstChild) { return }
     const containerHeight = this.content.offsetHeight;
     const textHeight = this.content.firstChild.offsetHeight
     const lineHeight = parseInt(getComputedStyle(this.content.firstChild).getPropertyValue('line-height')) || 0;
     if(containerHeight - textHeight > lineHeight) { 
       const fragment = this.state.fragment;
-      const nextFragment = slice(props.children,fragment.start, fragment.end+1)
+      const nextFragment = slice(this.props.children, fragment.start, fragment.end+1)
         if(nextFragment.end===fragment.end) {
           this.setState({phase: Phase.Complete});
           this.props.onPause();
