@@ -5,7 +5,7 @@ import { AppState } from "../state/types"
 import { Component, h } from "preact";
 import { Route, Router, RouterOnChangeArgs } from "preact-router";
 
-import { ChefSays, SaySomething } from "./chef-says";
+import { ChefSays } from "./chef-says";
 import { ConsentPopup } from "./consent";
 import { DilemmaRoute } from "./dilemma";
 import { FoodRoute } from "./food";
@@ -44,7 +44,6 @@ export default class App extends Component {
                         <Route path="/recommendation" component={RecRoute} />
                         <Route path="/feedme" component={ProcurementRoute} />
                         <Route path="/food/:id" component={FoodRoute} />
-                        <Route path="/say/:message?" component={SaySomething} />
                     </Router>
                     <ChefSays />
                     <Welcome />

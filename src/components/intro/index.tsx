@@ -1,8 +1,8 @@
 import { Component, h } from "preact";
 import { route } from "preact-router";
-import { AppState } from "src/state/types";
 import { connect } from "unistore/preact";
 import { ActionProps, actions as chefActions } from "../../components/chef-says"
+import { AppState, UserConsent } from "../../state/types";
 import { Caption } from "../chef-says/types";
 import * as style from "./style.css";
 
@@ -11,17 +11,49 @@ const done: Caption = {
     text: <p>Good luck!</p>,
     background: "/"
 }
-const step2: Caption = {
+const consent: Caption = {
     text: <p>
-        Let us know how we're doing by thumbing down any recommendations you 
-        don't want until you see one that you do.
+        Great! One last thing before I go.
+        We use cookies and Google Analytics 
+        to collect usage details and improve the site.
+    </p>,    
+    next: [
+        {display: "Fine by me!", caption: done, sideEffects: ()=>({analytics: UserConsent.AnalyticsAllowed})}, 
+        {display: "Please Don't", caption: done, sideEffects: ()=>({analytics: UserConsent.NoTracking})}
+    ],
+    undismissible: true
+} 
+const step4: Caption = {
+    text: <p>
+        Finally, if you liked one of my guesses, I'll be happy to google
+        recipes or delivery for you. Just click the pan for recipes or 
+        the delivery truck for delivery options near you.
     </p>,
-    next: done,
+    next: consent,
     undismissible: true,
     background: "/intro/2"
 }
-const step1: Caption = {
-    text: <p>Just keep picking whichever food you'd rather eat right now.</p>,
+const step3: Caption = {
+    text: <p>
+        Give me a thumbs up when you see something you do want.
+        If you don't want anything I guess, I'll start over from scratch.
+    </p>,
+    next: step4,
+    undismissible: true,
+    background: "/intro/2"
+}
+const step2: Caption = {
+    text: <p>
+        Next I'll try to guess what you're hungry for.
+        Let me know how I'm doing by thumbing down any recommendations you 
+        don't want.
+    </p>,
+    next: step3,
+    undismissible: true,
+    background: "/intro/2"
+}
+export const step1: Caption = {
+    text: <p>First I'll show you some combinations of food. Just keep picking whichever food you'd rather eat right now.</p>,
     next: step2,
     undismissible: true,
     background: "/intro/1"

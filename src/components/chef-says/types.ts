@@ -1,3 +1,4 @@
+import { AppState } from "src/state/types";
 
 export enum ChefPhase {
   Offscreen = 0,
@@ -14,10 +15,13 @@ export interface Chef {
   caption?: Readonly<Caption>
 }
 
+export type SideEffect = (state: AppState) => Partial<AppState>; 
+export type ForwardingFunction = (caption?: Caption, sideEffects?: SideEffect) => void;
+
 export interface Caption {
   text: any,
   undismissible?: boolean,
-  next?: Caption, // | Array<{ display: string, caption: Caption }>
+  next?: Caption | Array<{ display: string, caption: Caption, sideEffects?: SideEffect }>
   background?: string
 }
 
