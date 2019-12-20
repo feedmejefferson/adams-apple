@@ -5,7 +5,7 @@
     left: 0;
     height: 100vh;
     width: 100vw;
-    background-color: #dddddd33;
+    background-color: #dddddd00;
     z-index: 51;
 }
 .caption {
@@ -69,6 +69,7 @@
     }
     .chef-box {
         top: 10%;
+        left: 0;
     }
 }
 
