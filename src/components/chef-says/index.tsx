@@ -53,15 +53,12 @@ interface BubbleProps {
 }
 
 const Bubble = ({caption, onPause, onResume, forward}: BubbleProps) => {
-  return <div class={style.speechBubble}>
-    <Content 
+  return <Content 
       caption={caption}
       onResume={onResume} 
       onPause={onPause} 
       forward={forward}
     />
-  </div>
-
 }
 export const  ChefSays = connect(['chef'], actions )(({chef, dismiss, talk, stopTalking, say }: any) => {
   // no need to render anything if the chef is completely offscreen/dismissed
