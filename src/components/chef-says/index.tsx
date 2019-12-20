@@ -1,10 +1,18 @@
 import { Component, h } from "preact";
 import { route } from "preact-router";
 import { connect } from "unistore/preact";
+import { globalState } from "../../state";
 import { AppState } from "../../state/types";
 import { Content } from "./content";
 import * as style from "./style.css";
 import { Caption, Chef, ChefPhase, ForwardingFunction, SideEffect } from "./types";
+
+export const justSayIt = (caption: Caption) => {
+  const state = globalState.getState();
+  const phase = !state.chef || state.chef.phase < ChefPhase.Onscreen ? ChefPhase.Entering : ChefPhase.Talking;
+  const chef = { phase, caption }
+  globalState.setState({chef});
+}
 
 
 export const actions = {
@@ -28,9 +36,9 @@ export const actions = {
     if(!caption) { 
       return sideEffects ? {...sideEffects(state),...actions.dismiss(state)} : actions.dismiss(state); 
     }
-    if(caption.background) { route(caption.background) }
     const phase = !state.chef || state.chef.phase < ChefPhase.Onscreen ? ChefPhase.Entering : ChefPhase.Talking;
     const chef = { phase, caption }
+    if(caption.background) { route(caption.background, true) }
     return sideEffects ? {...sideEffects(state), chef} : { chef };
   }
 }

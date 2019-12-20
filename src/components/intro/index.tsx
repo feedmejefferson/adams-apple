@@ -59,20 +59,12 @@ export const step1: Caption = {
     background: "/intro/1"
 }
 
-const actions = {
-  say: chefActions.say
-}
-  
-interface OwnProps { 
-  step?: string;
-}
-type Props = Partial<AppState> & OwnProps & ActionProps;
-interface State {}
 
-export const Intro = connect(['ready'], actions )(({ready, step, say }: any) => {
-    if(!ready) {return null}
+export const Intro = ({ step }: any) => {
+    console.log(step)
     switch(step) {
         case "2":
+            console.log("um, case 2")
             return (
                 <div class={style.screen}>
                     <div class={style.recommended}/>
@@ -87,6 +79,8 @@ export const Intro = connect(['ready'], actions )(({ready, step, say }: any) => 
             );
 
         case "1": 
+        console.log("um, case 1")
+
             return (
                 <div class={style.screen}>
                 <div class={style.halfScreen}>
@@ -102,7 +96,8 @@ export const Intro = connect(['ready'], actions )(({ready, step, say }: any) => 
             );
 
         default: 
-            say(step1);
+        console.log("um, case default")
+
             return null;
     }
-})
+}

@@ -37,6 +37,8 @@ export default class App extends Component {
                 <div id="app">
                     <Tracker />
                     <Header />
+                    <ChefSays />
+                    <Welcome />
                     <Router onChange={this.handleRoute}>
                         <Route path="/" component={StartRoute} />
                         <Route path="/intro/:step?" component={Intro} />
@@ -45,8 +47,6 @@ export default class App extends Component {
                         <Route path="/feedme" component={ProcurementRoute} />
                         <Route path="/food/:id" component={FoodRoute} />
                     </Router>
-                    <ChefSays />
-                    <Welcome />
                 </div>
             </Provider>
         );
