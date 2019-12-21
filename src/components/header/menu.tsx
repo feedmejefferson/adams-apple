@@ -1,4 +1,5 @@
 import { Component, h } from "preact";
+import { Link } from "preact-router";
 import { justSayIt as say } from "../chef-says";
 import { step1 } from "../intro";
 import * as style from "./style.css";
@@ -19,9 +20,9 @@ export class Menu extends Component<Props, State> {
       <span/>
       
       <ul class={style.menu}>
-        <a href="/"><li>Start Over</li></a>
-        <a href="/intro/1" onClick={(e)=>{this.setState({checked: false});say(step1)}}><li>Tutorial</li></a>
-        <a onClick={()=>this.setState({checked: false})} href="https://portal.prodpad.com/7a1ea292-9d81-11e9-ba11-0288f735e5b9" target="_blank" rel="noopener"><li>Feedback</li></a>
+        <li><Link onClick={this.dismiss} href="/">Start Over</Link></li>
+        <li><Link onClick={()=>{this.dismiss();say(step1)}} href="/intro/1">Tutorial</Link></li>
+        <li><Link onClick={this.dismiss} href="https://portal.prodpad.com/7a1ea292-9d81-11e9-ba11-0288f735e5b9" target="_blank" rel="noopener">Feedback</Link></li>
       </ul>
     </div>
   </nav>
@@ -30,4 +31,7 @@ export class Menu extends Component<Props, State> {
   private updateCheck = (e: any) => {
     this.setState({ checked: e.target.checked });
   };
+  private dismiss = () => {
+    this.setState({checked: false});
+  }
 }

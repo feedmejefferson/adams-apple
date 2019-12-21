@@ -71,6 +71,11 @@ body {
     background-size: 200%;
     animation: pick-food 8s steps(1) 0s infinite;
 }
+.no-overflow {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
+}
 .opt-a {
     background-position-y: top;
 }

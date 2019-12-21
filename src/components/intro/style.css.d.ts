@@ -5,6 +5,7 @@ export const optA: string;
 export const optB: string;
 export const recommended: string;
 export const pickFood: string;
+export const noOverflow: string;
 export const recommendedFood: string;
 export const clicker: string;
 export const buttonClicker: string;

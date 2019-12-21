@@ -18,9 +18,9 @@ export const Attribution = ({ title, originTitle, originUrl, author, authorProfi
     return (
         <div class={style.attribution}>
             { (title!==originTitle) && <span>{title} -- originally titled </span> }
-            <a href={originUrl}>{originTitle}</a>
+            <a href={originUrl} target="_blank" rel="noopener">{originTitle}</a>
             { author && <span> by <a href={authorProfileUrl}>{author}</a></span> }
-            { license && <span> is licensed under <a href={licenseUrl}>{license}</a></span> }
+            { license && <span> is licensed under <a href={licenseUrl} target="_blank" rel="noopener">{license}</a></span> }
             .
         </div>
     );

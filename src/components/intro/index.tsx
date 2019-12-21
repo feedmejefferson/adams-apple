@@ -64,10 +64,11 @@ export const Intro = ({ step }: any) => {
     console.log(step)
     switch(step) {
         case "2":
-            console.log("um, case 2")
             return (
                 <div class={style.screen}>
-                    <div class={style.recommended}/>
+                    <div class={style.noOverflow}>
+                        <div class={style.recommended}/>
+                    </div>
                     <div class={style.feedback}>
                         <button class={style.accept}>👍</button>
                         <button class={style.reject}>👎</button>
@@ -79,8 +80,6 @@ export const Intro = ({ step }: any) => {
             );
 
         case "1": 
-        console.log("um, case 1")
-
             return (
                 <div class={style.screen}>
                 <div class={style.halfScreen}>
