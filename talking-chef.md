@@ -47,3 +47,10 @@ The developer should just specify the content of the dialogue. Here's a starting
         Background: An optional route that should show in the background of this caption
 
 Using the caption node as the basis for a graph, a dialogue is simply a directed graph of caption nodes.
+
+## Intro / Tutorial Animations
+
+1. hand moves back and forth clicking on food dilemmas in an infinite loop
+2. show apple, hand moves to red button and clicks once -- image changes on click to waffle
+3. hand moves from red button to green button (no click)
+4. hand clicks, screen changes to delivery truck and pan fried egg buttons.

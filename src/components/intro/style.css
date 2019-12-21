@@ -7,12 +7,11 @@
         background-position-x: right;
     }
 }
-@keyframes recommended-food {
-    from,
-    to {
+@keyframes change-food {
+    from {
         background-position: bottom left;
     }
-    50% {
+    to {
         background-position: top right;
     }
 }
@@ -41,13 +40,36 @@
     }
 }
 @keyframes click {
-    48%,
-    98% {
+    96% {
         background-position-x: right;
     }
-    49%,
-    99% {
+    98% {
         background-position-x: left;
+    }
+}
+
+@keyframes fast-click {
+    from {
+        background-position-x: right;
+    }
+    to {
+        background-position-x: left;
+    }
+}
+@keyframes appear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+@keyframes disappear {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
     }
 }
 
@@ -66,9 +88,13 @@ body {
 }
 .opt-a,
 .opt-b,
-.recommended {
+.bad-recommendation,
+.good-recommendation {
     background-image: url(/assets/sprites/food-sprites.svg);
     background-size: 200%;
+}
+.opt-a,
+.opt-b {
     animation: pick-food 8s steps(1) 0s infinite;
 }
 .no-overflow {
@@ -82,35 +108,57 @@ body {
 .opt-b {
     background-position-y: bottom;
 }
-.recommended {
-    animation: recommended-food 8s steps(1) 0s 1;
+.bad-recommendation {
+    animation: change-food 4s steps(1) 0s 1 forwards;
     background-position: bottom left;
 }
+.good-recommendation {
+    background-position: top right;
+}
 .clicker,
-.button-clicker {
+.hand-to-red,
+.hand-to-green,
+.hand-on-green {
     height: 0px;
     width: 10%;
     padding-bottom: 10%;
     position: absolute;
 }
-@keyframes move-hand-buttons {
-    from,
-    10%,
+@keyframes hand-to-red {
+    from {
+        top: -50vh;
+        left: 120vw;
+    }
+    90%,
+    to {
+        top: 4rem;
+        left: calc(50vw + 3rem);
+    }
+}
+@keyframes hand-to-green {
+    from {
+        left: calc(50vw + 3rem);
+    }
     90%,
     to {
         left: calc(50vw - 5rem);
     }
-    40%,
-    60% {
-        left: calc(50vw + 3rem);
-    }
 }
 
-.button-clicker {
+.hand-to-red {
+    position: absolute;
+    top: 4rem;
+    left: calc(50vw + 3rem);
+    animation: hand-to-red 4s ease 0s 1 forwards;
+}
+.hand-to-green,
+.hand-on-green {
     position: absolute;
     top: 4rem;
     left: calc(50vw - 5rem);
-    animation: move-hand-buttons 8s ease 0s 1;
+}
+.hand-to-green {
+    animation: hand-to-green 1s ease 0s 1 forwards;
 }
 .hand {
     height: 0px;
@@ -120,10 +168,12 @@ body {
     background-size: 200% 100%;
     background-position-x: left;
     background-position-y: top;
-    animation: click 8s steps(1) 0s infinite;
 }
-.recommended .hand {
-    animation: click 8s steps(1) 0s 1;
+.clicker .hand {
+    animation: click 4s steps(1) 0s infinite;
+}
+.hand-to-red .hand {
+    animation: click 4s steps(1) 0s 1;
 }
 .feedback {
     position: fixed;
@@ -167,7 +217,8 @@ body {
     padding-bottom: 40vh;
     margin: 5vh calc(50vw - 20vh);
 }
-.recommended {
+.bad-recommendation,
+.good-recommendation {
     width: 80vh;
     padding-bottom: 80vh;
     margin: 10vh calc(50vw - 40vh);
@@ -206,7 +257,8 @@ body {
         padding-bottom: 40vw;
         margin: calc(50vh - 20vw) 5vw;
     }
-    .recommended {
+    .bad-recommendation,
+    .good-recommendation {
         width: 80vw;
         padding-bottom: 80vw;
         margin: calc(50vh - 40vw) 10vw;
@@ -222,4 +274,38 @@ body {
     .instructions-bottom {
         top: 60%;
     }
+}
+
+.procurement {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.cook,
+.deliver {
+    display: flexbox;
+    height: 10rem;
+    width: 10rem;
+    border-radius: 50%;
+    font-size: 4rem;
+    margin: 1rem;
+    background-color: grey;
+}
+
+.hand-on-green .hand {
+    animation: fast-click 0.2s steps(1) 0.2s 1;
+}
+.swap .procurement {
+    opacity: 0;
+}
+.swap .procurement {
+    animation: appear 0s steps(1) 1s 1 forwards;
+}
+.swap .feedback button {
+    animation: disappear 0s steps(1) 1s 1 forwards;
 }

@@ -32,9 +32,8 @@ const consent: Caption = {
 } 
 const welcomeMessage: Caption = {
     text: <p>
-        Hi, I'm Chef Jefferson! 
-        Feel free to take the quick tutorial, or skip it if you know 
-        what you're doing.
+        Hungry? Not sure what you want? I can help! 
+        Take the tutorial, or skip it if you’re ready.
         </p>,
     next: [{display: "OK", caption: step1}, {display: "Skip", caption: consent}],
     undismissible: true

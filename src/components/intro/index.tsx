@@ -13,7 +13,7 @@ const done: Caption = {
 }
 const consent: Caption = {
     text: <p>
-        Great! One last thing before I go.
+        Great! One last thing. 
         We use cookies and Google Analytics 
         to collect usage details and improve the site.
     </p>,    
@@ -25,35 +25,27 @@ const consent: Caption = {
 } 
 const step4: Caption = {
     text: <p>
-        Finally, if you liked one of my guesses, I'll be happy to google
-        recipes or delivery for you. Just click the pan for recipes or 
-        the delivery truck for delivery options near you.
+        If you liked a food, I'll be happy to google recipes or delivery for you. 
+        Click the pan for recipes or the delivery truck for delivery options near you.
     </p>,
     next: consent,
     undismissible: true,
-    background: "/intro/2"
+    background: "/intro/4"
 }
 const step3: Caption = {
-    text: <p>
-        Give me a thumbs up when you see something you do want.
-        If you don't want anything I guess, I'll start over from scratch.
-    </p>,
+    text: <p>Give a thumbs up when you see what you want. If you don't want anything, I'll start over.</p>,
     next: step4,
     undismissible: true,
-    background: "/intro/2"
+    background: "/intro/3"
 }
 const step2: Caption = {
-    text: <p>
-        Next I'll try to guess what you're hungry for.
-        Let me know how I'm doing by thumbing down any recommendations you 
-        don't want.
-    </p>,
+    text: <p>Next I'll try to guess what you're hungry for. If I’m wrong, thumb down any foods you don't want.</p>,
     next: step3,
     undismissible: true,
     background: "/intro/2"
 }
 export const step1: Caption = {
-    text: <p>First I'll show you some combinations of food. Just keep picking whichever food you'd rather eat right now.</p>,
+    text: <p>First I'll show you some combinations of food. Pick whichever food you'd rather eat right now.</p>,
     next: step2,
     undismissible: true,
     background: "/intro/1"
@@ -62,16 +54,52 @@ export const step1: Caption = {
 
 export const Intro = ({ step }: any) => {
     switch(step) {
-        case "2":
+        case "4":
             return (
-                <div class={style.screen}>
+                <div class={`${style.screen} ${style.swap}`}>
                     <div class={style.noOverflow}>
-                        <div class={style.recommended}/>
+                        <div class={style.goodRecommendation}/>
                     </div>
                     <div class={style.feedback}>
                         <button class={style.accept}>👍</button>
                         <button class={style.reject}>👎</button>
-                        <div class={style.buttonClicker}>
+                        <div class={style.handOnGreen}>
+                            <div class={style.hand}/> 
+                        </div>
+                    </div>
+                    <div class={style.procurement}>
+                        <button class={style.cook}>🍳</button>
+                        <button class={style.deliver}>🚚</button>
+                    </div>
+                </div>
+            );
+
+        case "3":
+            return (
+                <div class={style.screen}>
+                    <div class={style.noOverflow}>
+                        <div class={style.goodRecommendation}/>
+                    </div>
+                    <div class={style.feedback}>
+                        <button class={style.accept}>👍</button>
+                        <button class={style.reject}>👎</button>
+                        <div class={style.handToGreen}>
+                            <div class={style.hand}/> 
+                        </div>
+                    </div>
+                </div>
+            );
+
+        case "2":
+            return (
+                <div class={style.screen}>
+                    <div class={style.noOverflow}>
+                        <div class={style.badRecommendation}/>
+                    </div>
+                    <div class={style.feedback}>
+                        <button class={style.accept}>👍</button>
+                        <button class={style.reject}>👎</button>
+                        <div class={style.handToRed}>
                             <div class={style.hand}/> 
                         </div>
                     </div>
