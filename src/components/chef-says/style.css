@@ -38,7 +38,9 @@
     display: block;
 }
 .buttons button {
+    font-family: "Mouse Memoirs", sans-serif;
     font-size: 1.5rem;
+    line-height: 1.25;
     padding: 0.25em 0.5em;
     color: white;
     background-color: #08a;

@@ -61,7 +61,6 @@ export const step1: Caption = {
 
 
 export const Intro = ({ step }: any) => {
-    console.log(step)
     switch(step) {
         case "2":
             return (
@@ -95,7 +94,6 @@ export const Intro = ({ step }: any) => {
             );
 
         default: 
-        console.log("um, case default")
 
             return null;
     }
