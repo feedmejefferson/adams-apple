@@ -1,5 +1,4 @@
 import { Component, h } from "preact";
-import { AppState } from "src/state/types";
 import { CaptionFragment, EMPTY_FRAGMENT, slice } from "./parse"
 import * as style from "./style.css";
 import { Caption, ForwardingFunction, OptionList, SideEffect } from "./types";
@@ -33,6 +32,26 @@ const Buttons = ({options, forward}: {options: OptionList[], forward: Forwarding
 export class Content extends Component<Props, State> {
   public content: any;
   public delay = 40; // extra millisecond delay per word character
+  public handleClick = (e: any) => {
+    if(e) { e.stopPropagation() }
+    const phase = this.state.phase;
+    const caption = this.props.caption;
+    const fragment = this.state.fragment;
+    if(phase===Phase.More) { 
+      this.props.onResume();
+      this.setState({fragment: slice(caption.text, fragment.end, fragment.end), phase: Phase.Talking});
+    } else if (phase===Phase.Complete) { 
+      // TODO: show the buttons
+      let nextCaption: Caption | null = null;
+      if(!Array.isArray(caption.next)) {
+        nextCaption = caption.next as Caption;
+        this.props.forward(nextCaption);
+      }         
+    } else { 
+      // chef is still talking, user is impatient -- speed things up
+      this.delay = 1 
+    }
+  }
   public componentWillReceiveProps(nextProps: Props){
     if(nextProps.caption.text!==this.props.caption.text && JSON.stringify(nextProps.caption.text)!==JSON.stringify(this.props.caption.text)){
       this.setState({fragment: EMPTY_FRAGMENT, phase: Phase.Talking});
@@ -42,31 +61,13 @@ export class Content extends Component<Props, State> {
     if(!fragment || !this.state.fragment ) { return true }
     return (phase !== this.state.phase || fragment.end > this.state.fragment.end);
   }
-  
   public render({ caption, forward }: Props, {fragment, phase}: State) {
     if(!fragment) {
       this.setState({fragment: EMPTY_FRAGMENT, phase: Phase.Talking})
       return <div class={style.caption} ref={c=> this.content=c}/>
     }
-    const handleClick = (e: any) => {
-      if(e) { e.stopPropagation() } 
-      if(phase===Phase.More) { 
-        this.props.onResume();
-        this.setState({fragment: slice(caption.text, fragment.end, fragment.end), phase: Phase.Talking});
-      } else if (phase===Phase.Complete) { 
-        // TODO: show the buttons
-        let nextCaption: Caption | null = null;
-        if(!Array.isArray(caption.next)) {
-          nextCaption = caption.next as Caption;
-          this.props.forward(nextCaption);
-        }         
-      } else { 
-        // chef is still talking, user is impatient -- speed things up
-        this.delay = 1 
-      }
-    }
     return (
-      <div class={style.speechBubble} onClick={handleClick} ref={c=> this.content=c}>
+      <div class={style.speechBubble} onClick={this.handleClick} ref={c=> this.content=c}>
         <div class={style.caption} >
           <p>
           {fragment.content}
@@ -98,5 +99,21 @@ export class Content extends Component<Props, State> {
     this.props.onPause();
 //    setTimeout(()=>{this.props.onPause()},500);
   }
-  
+
+  // This is a quick last minute hack to allow users to click anywhere
+  // on the screen to speed up the progression of a dialogue that can't
+  // otherwise be dismissed. It might interfere with dismissible dialogues
+  // but we don't actually have any of those right now.
+  public handleClickOutside = (e: any) => {
+    if(this.props.caption && this.props.caption.undismissible) { 
+      this.handleClick(e)
+    }
+  }
+  public componentDidMount() {
+    document.addEventListener('click', this.handleClickOutside);
+  }
+
+  public componentWillUnmount() {
+    document.removeEventListener('click', this.handleClickOutside);
+  }
 }
