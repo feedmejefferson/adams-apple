@@ -47,7 +47,7 @@ export default function(config, env, helpers) {
     if (!env.isProd) {
         copyList.push({ from: "themes/dev" });
     }
-    config.plugins.push(new CopyWebpackPlugin(copyList));
+    config.plugins.push(new CopyWebpackPlugin({ patterns: copyList }));
 
     // first pull from the main production configuration (as the default)
     // but then apply any lifecycle specific overrides

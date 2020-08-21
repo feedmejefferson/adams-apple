@@ -1,5 +1,5 @@
-self.__precacheManifest = [].concat(self.__precacheManifest || []);
-workbox.precaching.precacheAndRoute(self.__precacheManifest);
+self.__WB_MANIFEST = [].concat(self.__WB_MANIFEST || []);
+workbox.precaching.precacheAndRoute(self.__WB_MANIFEST);
 
 workbox.routing.registerRoute(
     "/",
